@@ -1,0 +1,8 @@
+FOTO DELL'ARTISTA
+Carica qui la foto con il nome esatto:  luisa-foschi.jpg
+(formato verticale, circa 900x1200 px). Finché non c'è, il sito usa la foto online.
+
+IMMAGINI DELLE OPERE
+Puoi caricare le foto delle opere nella cartella "opere" (es. opere/buio-dentro.jpg)
+e poi scrivere in assets/js/opere.js:  immagine: "assets/img/opere/buio-dentro.jpg"
+Consigliato: JPG, lato lungo 1200-1600 px, peso sotto i 300 KB.
