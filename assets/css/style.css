@@ -143,7 +143,7 @@ em{font-style:italic}
 .row-group{display:flex;gap:var(--tile-gap);padding-right:var(--tile-gap)}
 .tile{display:flex;flex-direction:column;flex:0 0 auto;color:inherit;-webkit-tap-highlight-color:transparent;-webkit-user-drag:none}
 .tile-art{position:relative;display:block;height:var(--art-h);aspect-ratio:var(--ar,.8);background:#2A231D}
-.tile-art img{width:100%;height:100%;object-fit:cover;-webkit-user-drag:none;box-shadow:0 2px 6px rgba(0,0,0,.45),0 22px 40px -20px rgba(0,0,0,.85);transition:transform .55s var(--ease),box-shadow .55s var(--ease)}
+.tile-art img{width:100%;height:100%;object-fit:cover;-webkit-user-drag:none;box-shadow:0 2px 6px rgba(0,0,0,.45),0 22px 40px -20px rgba(0,0,0,.85);transition:transform .55s var(--ease),box-shadow .55s var(--ease),opacity .6s ease}
 .tile-art picture{display:block;width:100%;height:100%}
 .tile-art::after{content:'Scopri l\2019opera';position:absolute;left:0;right:0;bottom:0;padding:1.6rem .8rem .7rem;font-size:.75rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:#fff;text-align:center;background:linear-gradient(transparent,rgba(15,12,10,.78));opacity:0;transition:opacity .35s,transform .55s var(--ease)}
 .tile-badge{position:absolute;top:.5rem;left:.5rem;z-index:1;font-size:.75rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;background:var(--gold-l);color:var(--ink);padding:.25rem .5rem}
@@ -210,7 +210,9 @@ em{font-style:italic}
 .work-link{display:block;-webkit-tap-highlight-color:transparent}
 .work-frame{position:relative;display:block;aspect-ratio:var(--ar,.8);overflow:hidden;background:#ECE6DC;box-shadow:0 1px 2px rgba(30,22,14,.08),0 18px 36px -24px rgba(30,22,14,.45)}
 .work-frame picture{display:block;width:100%;height:100%}
-.work-frame img{width:100%;height:100%;object-fit:cover;transition:transform .9s var(--ease)}
+.work-frame img{width:100%;height:100%;object-fit:cover;transition:transform .9s var(--ease),opacity .6s ease}
+/* finché la foto non arriva si vede il colore medio del quadro */
+.js .tile-art img:not(.is-loaded),.js .work-frame img:not(.is-loaded){opacity:0}
 .work-badge{position:absolute;top:.6rem;left:.6rem;z-index:1;font-size:.75rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;background:var(--terra);color:#fff;padding:.3rem .55rem}
 .work-sold{position:absolute;top:.6rem;right:.6rem;z-index:1;font-size:.75rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;background:var(--ink);color:#fff;padding:.3rem .55rem}
 .work-cta{position:absolute;left:50%;bottom:1rem;transform:translate(-50%,10px);padding:.6rem 1.1rem;border-radius:999px;font-size:.75rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;color:var(--ink);background:rgba(252,251,248,.94);opacity:0;transition:opacity .35s,transform .45s var(--ease)}
