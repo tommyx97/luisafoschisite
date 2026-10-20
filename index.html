@@ -3,270 +3,384 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#14100c">
-<title>Luisa Foschi — Pittrice · Firenze</title>
-<meta name="description" content="Luisa Foschi, pittrice fiorentina. Opere originali ad olio su tela: figure femminili, emozioni autentiche. Opere in vendita e su commissione.">
+<meta name="theme-color" content="#17130F">
+<title>Luisa Foschi — Pittrice a Firenze · Opere originali a olio</title>
+<meta name="description" content="Luisa Foschi, pittrice fiorentina. Opere originali a olio su tela, pezzi unici firmati con certificato di autenticità: figure femminili, emozioni e visioni. Opere in vendita e su commissione, spedizione gratuita in Italia.">
+<link rel="canonical" href="https://luisafoschi.it/">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Luisa Foschi — Pittrice · Firenze">
-<meta property="og:description" content="Opere originali ad olio su tela. Figure femminili, emozioni autentiche.">
-<meta property="og:image" content="https://www.artegante.it/opera/16824.jpg">
 <meta property="og:locale" content="it_IT">
+<meta property="og:url" content="https://luisafoschi.it/">
+<meta property="og:title" content="Luisa Foschi — Pittrice · Firenze">
+<meta property="og:description" content="Opere originali a olio su tela. Figure femminili, emozioni autentiche. Pezzi unici in vendita e su commissione.">
+<meta property="og:image" content="https://luisafoschi.it/assets/img/og-luisa-foschi.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@400;500&display=swap"></noscript>
 <link rel="stylesheet" href="assets/css/style.css">
+<script>document.documentElement.classList.add('js')</script>
 <script src="assets/js/opere.js" defer></script>
 <script src="assets/js/main.js" defer></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Luisa Foschi",
+  "jobTitle": "Pittrice",
+  "url": "https://luisafoschi.it/",
+  "image": "https://luisafoschi.it/assets/img/luisa-foschi.jpg",
+  "address": { "@type": "PostalAddress", "addressLocality": "Firenze", "addressCountry": "IT" },
+  "telephone": "+39 340 303 8995",
+  "sameAs": ["https://www.instagram.com/projects.luisa", "https://www.artegante.it/luisa.foschi"]
+}
+</script>
 </head>
 <body>
 
+<a class="skip" href="#opere">Vai alle opere</a>
+
 <!-- NAV -->
-<nav class="nav" id="nav">
-  <a href="#hero" class="nav-logo">Luisa Foschi</a>
-  <ul class="nav-links" id="navLinks">
-    <li><a href="#about">Chi Sono</a></li>
-    <li><a href="#commissions">Commissioni</a></li>
-    <li><a href="#gallery">Opere</a></li>
-    <li><a href="#contact">Contatto</a></li>
-  </ul>
-  <button class="ham" id="ham" aria-label="Menu" aria-expanded="false">
-    <span></span><span></span><span></span>
-  </button>
-</nav>
-
-<!-- HERO -->
-<section id="hero">
-  <div class="h-glow"    aria-hidden="true"></div>
-  <div class="h-dotgrid" aria-hidden="true"></div>
-  <div class="h-line"    aria-hidden="true"></div>
-  <div class="h-line"    aria-hidden="true"></div>
-  <div class="h-line"    aria-hidden="true"></div>
-  <div class="h-ring h-ring-1" aria-hidden="true"></div>
-  <div class="h-ring h-ring-2" aria-hidden="true"></div>
-  <div class="h-grain"   aria-hidden="true"></div>
-  <div class="h-particles" aria-hidden="true">
-    <div class="h-p"></div><div class="h-p"></div><div class="h-p"></div>
-    <div class="h-p"></div><div class="h-p"></div><div class="h-p"></div>
+<header class="nav" id="nav">
+  <div class="nav-in">
+    <a href="#top" class="nav-logo" aria-label="Luisa Foschi — torna all'inizio">Luisa <em>Foschi</em></a>
+    <nav aria-label="Menu principale">
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#opere">Opere</a></li>
+        <li><a href="#artista">L&rsquo;artista</a></li>
+        <li><a href="#mostre">Mostre</a></li>
+        <li><a href="#commissioni">Commissioni</a></li>
+        <li><a href="#contatti" class="nav-cta">Contatti</a></li>
+        <li class="nav-quick">
+          <a href="https://wa.me/393403038995" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+          <a href="tel:+393403038995">Chiama</a>
+        </li>
+      </ul>
+    </nav>
+    <button class="ham" id="ham" type="button" aria-label="Apri il menu" aria-expanded="false" aria-controls="navLinks">
+      <span></span><span></span><span></span>
+    </button>
   </div>
-  <div class="h-corner h-corner-tl" aria-hidden="true"></div>
-  <div class="h-corner h-corner-tr" aria-hidden="true"></div>
-  <div class="h-corner h-corner-bl" aria-hidden="true"></div>
-  <div class="h-corner h-corner-br" aria-hidden="true"></div>
+</header>
 
-  <div class="h-content">
-    <div class="h-eyebrow">
-      <span class="h-eyebrow-line"></span>
-      <span class="h-eyebrow-text">Pittrice &middot; Firenze</span>
-      <span class="h-eyebrow-line"></span>
-    </div>
-    <h1 class="h-title">Luisa <em>Foschi</em></h1>
-    <div class="h-sep" aria-hidden="true">
-      <span class="h-sep-line"></span>
-      <span class="h-sep-diamond"></span>
-      <span class="h-sep-line"></span>
-    </div>
-    <p class="h-tag">&ldquo;Dipingere &egrave; ossigeno&rdquo;</p>
-    <div class="h-ctas">
-      <a href="#gallery"     class="btn btn-solid">Scopri le opere</a>
-      <a href="#commissions" class="btn btn-ghost-light">Commissioni</a>
-    </div>
+<main id="top">
+
+<!-- HERO: parete di opere a tutta larghezza (la riempie main.js con i dati di opere.js) -->
+<section class="hero" id="hero" aria-labelledby="heroTitle">
+  <div class="hero-head">
+    <h1 class="hero-title" id="heroTitle">Luisa <em>Foschi</em></h1>
+    <p class="hero-sub"><span>Pittrice &middot; Firenze</span><span class="hero-sep" aria-hidden="true"></span><em>&ldquo;Dipingere &egrave; ossigeno&rdquo;</em></p>
   </div>
-  <div class="h-scroll" aria-hidden="true">
-    <span>Scorri</span>
-    <div class="h-scroll-bar"></div>
+
+  <div class="hero-wall" id="heroWall">
+    <div class="row" id="row1" role="group" aria-label="Opere disponibili, prima fila"></div>
+    <div class="row" id="row2" role="group" aria-label="Opere disponibili, seconda fila"></div>
+    <noscript><p class="hero-hint"><a href="#opere">Vai alle opere</a></p></noscript>
+  </div>
+
+  <div class="hero-foot">
+    <a href="#opere" class="btn btn-solid"><span>Tutte le <span id="heroCount">22</span> opere</span></a>
+    <p class="hero-hint">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M15 8l4 4-4 4M9 8l-4 4 4 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="hint-touch">Tocca un quadro per prezzo e dettagli</span>
+      <span class="hint-mouse">Clicca un quadro per prezzo e dettagli &middot; trascina per scorrere</span>
+    </p>
   </div>
 </section>
 
-<!-- CHI SONO -->
-<section id="about">
+<!-- OPERE -->
+<section class="sec sec-paper" id="opere" aria-labelledby="opereTitle">
   <div class="wrap">
-    <div class="about-grid">
-
-      <div class="about-img-col reveal">
-        <img class="about-photo" src="assets/img/luisa-foschi.jpg" alt="Luisa Foschi, pittrice fiorentina" loading="eager" data-fb="https://www.artegante.it/post/images/7617e7af65709ee59e0603efcb97d197_foto%202.jpg|https://www.artegante.it/opera/16644.jpg" onerror="var f=(this.dataset.fb||'').split('|').filter(Boolean);if(f.length){this.dataset.fb=f.slice(1).join('|');this.src=f[0]}else{this.onerror=null}">
+    <div class="sec-head sec-head-row reveal">
+      <div>
+        <p class="eyebrow"><span class="eb-n">01</span>Catalogo</p>
+        <h2 class="h2" id="opereTitle">Le <em>opere</em></h2>
+        <p class="sec-lead">Opere originali, pezzi unici firmati e con certificato di autenticit&agrave;. Visibili dal vivo a Firenze, spedizione gratuita in tutta Italia.</p>
       </div>
-
-      <div class="about-copy reveal">
-        <span class="section-tag">Chi Sono</span>
-        <h2 class="h2">L&rsquo;arte come<br><em>linguaggio dell&rsquo;anima</em></h2>
-        <blockquote class="about-quote">
-          &ldquo;Le mie opere nascono da un profondo bisogno di comunicare
-          ci&ograve; che spesso le parole non riescono a esprimere.&rdquo;
-        </blockquote>
-        <div class="about-text">
-          <p>Mi chiamo Luisa Foschi, sono un&rsquo;artista che esprime emozioni, visioni e riflessioni attraverso la pittura. Nata e cresciuta a Firenze, circondata dalla bellezza della citt&agrave;, ho a lungo dovuto soffocare questa passione. Un giorno il cuore &egrave; tornato a battere.</p>
-          <p>Dipingo principalmente a olio su tela, sperimentando con acrilici, foglia oro e tecniche miste. Il mio stile &egrave; figurativo, intimo, personale. Al centro del mio universo pittorico c&rsquo;&egrave; la figura femminile: forza e fragilit&agrave;, madre e creatura.</p>
-        </div>
-        <div class="about-stats">
-          <div><div class="stat-n" id="statOpere">20</div><div class="stat-l">Opere in galleria</div></div>
-          <div><div class="stat-n">11+</div><div class="stat-l">Esposizioni</div></div>
-          <div><div class="stat-n">2021</div><div class="stat-l">Prima mostra</div></div>
-        </div>
-        <div class="critica-box">
-          <p>Le cromie evocano la terra e gli alberi in quella sinergia cromatica che risulta essere alla base del pensiero dell&rsquo;artista. Si anima la natura nell&rsquo;essenza umana che si fonde alla meraviglia della Madre Terra.</p>
-          <cite>Dott.ssa Elisabetta La Rosa, storica dell&rsquo;arte &mdash; Catalogo &ldquo;Espressioni d&rsquo;arte del XXI sec.&rdquo;</cite>
-        </div>
-        <div class="expo-wrap">
-          <span class="section-tag" style="margin-top:0;margin-bottom:.6rem">Esposizioni</span>
-          <div class="expo-grid">
-            <div class="expo-item"><strong>&ldquo;Outside Your Window&rdquo;</strong><span>Art Space Milano &middot; 2021</span></div>
-            <div class="expo-item"><strong>Esposizione MundoArti</strong><span>Valencia, Spagna &middot; 2022</span></div>
-            <div class="expo-item"><strong>Spazio San Marco</strong><span>Firenze &middot; 2022</span></div>
-            <div class="expo-item"><strong>&ldquo;Fiori d&rsquo;Autunno&rdquo;</strong><span>Milano &middot; 2022&ndash;23</span></div>
-            <div class="expo-item"><strong>Arte in Vetrina</strong><span>Roma Frascati &middot; 2023</span></div>
-            <div class="expo-item"><strong>Personale &ldquo;Il mio viaggio senza meta&rdquo;</strong><span>Soc. Canottieri Firenze &middot; 2024</span></div>
-            <div class="expo-item"><strong>Ri-Composizioni (catalogata)</strong><span>Palazzo Rospigliosi &middot; 2025</span></div>
-            <div class="expo-item"><strong>Expo Donna Creativa</strong><span>Firenze &middot; Maggio 2025</span></div>
-            <div class="expo-item"><strong>Freedom Art &middot; ML Show Lab</strong><span>Roma &middot; 2025</span></div>
-            <div class="expo-item"><strong>Donna Oggi #5</strong><span>Galleria Gadarte, Firenze &middot; 2026</span></div>
-            <div class="expo-item"><strong>VisionArte &middot; Onart Gallery</strong><span>Firenze &middot; Apr 2026</span></div>
-            <div class="expo-item"><strong>Pubblicazione catalogo critico</strong><span>ISBN 979-12-81993-12-9</span></div>
-          </div>
-        </div>
+      <div class="sort" role="group" aria-label="Ordina le opere">
+        <span class="sort-lbl" aria-hidden="true">Ordina</span>
+        <button type="button" class="sort-btn" data-sort="recenti" aria-pressed="true">Pi&ugrave; recenti</button>
+        <button type="button" class="sort-btn" data-sort="prezzo-asc" aria-pressed="false">Prezzo &uarr;</button>
+        <button type="button" class="sort-btn" data-sort="prezzo-desc" aria-pressed="false">Prezzo &darr;</button>
       </div>
+    </div>
 
+    <div class="works" id="works"></div>
+    <noscript><p class="sec-lead">Per vedere le opere attiva JavaScript, oppure visita la galleria su <a href="https://www.artegante.it/luisa.foschi">Artegante</a>.</p></noscript>
+
+    <div class="works-foot">
+      <button class="btn btn-line" id="showAll" type="button" hidden>Vedi tutte le opere</button>
+    </div>
+  </div>
+</section>
+
+<!-- L'ARTISTA -->
+<section class="sec" id="artista" aria-labelledby="artistaTitle">
+  <div class="wrap about">
+    <figure class="about-photo reveal">
+      <div class="about-frame"><img src="assets/img/luisa-foschi.jpg" alt="Ritratto di Luisa Foschi, pittrice fiorentina" width="500" height="500" loading="lazy"></div>
+      <figcaption>Luisa Foschi &middot; Firenze</figcaption>
+    </figure>
+
+    <div class="about-copy reveal">
+      <p class="eyebrow"><span class="eb-n">02</span>L&rsquo;artista</p>
+      <h2 class="h2" id="artistaTitle">L&rsquo;arte come<br><em>linguaggio dell&rsquo;anima</em></h2>
+      <!-- PANNELLO:BIO -->
+      <p class="about-lead">Le mie opere nascono dal profondo desiderio di dare voce a ciò che spesso le parole non riescono a esprimere: emozioni, visioni e pensieri che trovano nella pittura la loro forma più autentica.</p>
+      <div class="about-text">
+        <p>Mi chiamo Luisa Foschi e attraverso la pittura racconto il mio mondo interiore, trasformando emozioni e riflessioni in immagini. Nata e cresciuta a Firenze, città in cui la bellezza e l’arte sono parte integrante del paesaggio quotidiano, ho custodito a lungo questa passione in silenzio, fino al momento in cui ho sentito il bisogno di ritrovarla e darle finalmente spazio. È stato come sentire il cuore tornare a battere, riscoprendo una parte profonda e autentica di me stessa.</p>
+        <p>Dipingo prevalentemente a olio su tela, lasciandomi guidare dalla curiosità e dalla sperimentazione attraverso acrilici, foglia d’oro e tecniche miste. La mia ricerca si muove nell’ambito della figurazione, con uno stile intimo e personale, in cui ogni opera diventa uno spazio di espressione e di dialogo con chi la osserva.</p>
+        <p>Al centro del mio universo pittorico si trova la figura femminile, presenza intensa e ricca di sfumature: forza e fragilità, maternità e creaturalità, radicamento e trasformazione. Una figura che accoglie contrasti e sensibilità, diventando specchio dell’esperienza umana e delle sue infinite possibilità di espressione.</p>
+      </div>
+      <!-- /PANNELLO:BIO -->
+      <p class="about-sign" aria-hidden="true">Luisa Foschi</p>
+
+      <dl class="stats">
+        <div><dt>Opere in catalogo</dt><dd id="statOpere">22</dd></div>
+        <div><dt>Esposizioni</dt><dd id="statMostre">14</dd></div>
+        <div><dt>Prima mostra</dt><dd>2021</dd></div>
+      </dl>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <blockquote class="critica reveal">
+      <!-- PANNELLO:CRITICA -->
+      <p>&ldquo;Le cromie evocano la terra e gli alberi in quella sinergia cromatica che risulta essere alla base del pensiero dell’artista. Si anima la natura nell’essenza umana che si fonde alla meraviglia della Madre Terra.&rdquo;</p>
+      <footer>Dott.ssa Elisabetta La Rosa, storica dell’arte &mdash; <cite>Catalogo “Espressioni d’arte del XXI sec.”</cite></footer>
+      <!-- /PANNELLO:CRITICA -->
+    </blockquote>
+  </div>
+</section>
+
+<!-- MOSTRE -->
+<section class="sec sec-paper" id="mostre" aria-labelledby="mostreTitle">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow"><span class="eb-n">03</span>Percorso</p>
+      <h2 class="h2" id="mostreTitle">Mostre ed <em>esposizioni</em></h2>
+    </div>
+
+    <ol class="expo reveal" id="expoList">
+      <!-- PANNELLO:MOSTRE -->
+      <li class="expo-item"><span class="expo-year">2026</span><div><strong>Io sono così</strong><span>ON ART Gallery, Firenze · 9–11 maggio</span></div></li>
+      <li class="expo-item"><span class="expo-year">2026</span><div><strong>VisionArte</strong><span>ONART Gallery, Firenze · 11–22 aprile</span></div></li>
+      <li class="expo-item"><span class="expo-year">2026</span><div><strong>Donna Oggi #5</strong><span>Galleria Gadarte, Firenze · 7–19 marzo</span></div></li>
+      <li class="expo-item"><span class="expo-year">2025</span><div><strong>Insieme in Arte</strong><span>Circolo Artisti Casa di Dante, Firenze · dicembre 2025 – gennaio 2026</span></div></li>
+      <li class="expo-item"><span class="expo-year">2025</span><div><strong>Freedom Art</strong><span>ML Show Lab, Roma · 24 ottobre – 7 novembre</span></div></li>
+      <li class="expo-item"><span class="expo-year">2025</span><div><strong>Incontri d’Estate</strong><span>Circolo Artisti Casa di Dante, Firenze · 14–26 giugno</span></div></li>
+      <li class="expo-item"><span class="expo-year">2025</span><div><strong>Expo Donna Creativa</strong><span>Firenze · 24–25 maggio</span></div></li>
+      <li class="expo-item"><span class="expo-year">2025</span><div><strong>Ri-Composizioni <em>(mostra catalogata)</em></strong><span>Palazzo Rospigliosi, Zagarolo (Roma) · 1–16 febbraio</span></div></li>
+      <li class="expo-item expo-key"><span class="expo-year">2024</span><div><strong>Mostra personale “Il mio viaggio senza meta”</strong><span>Sede storica della Società Canottieri Firenze · 25 novembre – 3 dicembre</span></div></li>
+      <li class="expo-item"><span class="expo-year">2023</span><div><strong>Arte in Vetrina</strong><span>Frascati (Roma) · 30 settembre – 5 novembre</span></div></li>
+      <li class="expo-item"><span class="expo-year">2022</span><div><strong>Fiori d’Autunno</strong><span>Milano · ottobre 2022 – febbraio 2023</span></div></li>
+      <li class="expo-item"><span class="expo-year">2022</span><div><strong>Spazio Espositivo San Marco</strong><span>Firenze · 24 aprile – 4 maggio</span></div></li>
+      <li class="expo-item"><span class="expo-year">2022</span><div><strong>MundoArti · esposizione internazionale</strong><span>Valencia, Spagna</span></div></li>
+      <li class="expo-item"><span class="expo-year">2021</span><div><strong>“Outside Your Window”</strong><span>Art Space Milano · mostra virtuale</span></div></li>
+      <!-- /PANNELLO:MOSTRE -->
+    </ol>
+
+    <div class="pub reveal">
+      <p class="eyebrow">Pubblicazioni</p>
+      <!-- PANNELLO:PUBBLICAZIONI -->
+      <p><strong>“Espressioni d’arte – Studi di critica d’arte del XXI secolo”</strong>, catalogo a cura della storica dell’arte Elisabetta La Rosa · ISBN 979-12-81993-12-9</p>
+      <!-- /PANNELLO:PUBBLICAZIONI -->
     </div>
   </div>
 </section>
 
 <!-- COMMISSIONI -->
-<section id="commissions">
-  <div class="comm-wrap reveal">
-    <span class="section-tag">Su misura</span>
-    <h2 class="comm-title">Opere <em>su commissione</em></h2>
-    <p class="comm-desc">Luisa realizza quadri personalizzati su richiesta partendo da un&rsquo;idea o da una fotografia. Ritratti di persone o animali, formati su misura. Ogni commissione &egrave; un dialogo tra artista e committente.</p>
-    <div class="comm-grid">
-      <div class="comm-item"><div class="comm-dot"></div><strong>Ritratti</strong><span>Da fotografia, persone o animali, restituiti con cura pittorica</span></div>
-      <div class="comm-item"><div class="comm-dot"></div><strong>Formato su misura</strong><span>Dimensioni e soggetto studiati per i tuoi spazi e il tuo gusto</span></div>
-      <div class="comm-item"><div class="comm-dot"></div><strong>Tempi concordati</strong><span>Processo trasparente, aggiornamenti in corso d&rsquo;opera</span></div>
-      <div class="comm-item"><div class="comm-dot"></div><strong>Certificato incluso</strong><span>Autenticit&agrave; garantita, opera firmata fronte e retro</span></div>
-    </div>
-    <a href="#contact" class="btn btn-solid">Richiedi un&rsquo;opera su commissione</a>
+<section class="sec sec-dark" id="commissioni" aria-labelledby="commTitle">
+  <div class="wrap comm reveal">
+    <p class="eyebrow"><span class="eb-n">04</span>Su misura</p>
+    <h2 class="h2" id="commTitle">Opere <em>su commissione</em></h2>
+    <p class="sec-lead">Luisa realizza quadri personalizzati su richiesta partendo da un&rsquo;idea o da una fotografia. Ritratti di persone o animali, formati su misura. Ogni commissione &egrave; un dialogo tra artista e committente.</p>
+    <ul class="comm-grid">
+      <li><strong>Ritratti</strong><span>Da fotografia, persone o animali, restituiti con cura pittorica</span></li>
+      <li><strong>Formato su misura</strong><span>Dimensioni e soggetto studiati per i tuoi spazi e il tuo gusto</span></li>
+      <li><strong>Tempi concordati</strong><span>Processo trasparente, aggiornamenti in corso d&rsquo;opera</span></li>
+      <li><strong>Certificato incluso</strong><span>Autenticit&agrave; garantita, opera firmata fronte e retro</span></li>
+    </ul>
+    <a href="#contatti" class="btn btn-solid" id="commBtn">Richiedi un&rsquo;opera su commissione</a>
   </div>
 </section>
 
-<!-- GALLERIA -->
-<section id="gallery">
-  <div class="wrap">
-    <div class="gallery-head reveal">
-      <span class="section-tag">Portfolio</span>
-      <h2 class="h2">Le <em>Opere</em></h2>
-      <p>Opere originali, pezzi unici firmati e con certificato di autenticit&agrave;. Visibili a Firenze o spedibili in tutta Italia.</p>
+<!-- CONTATTI -->
+<section class="sec" id="contatti" aria-labelledby="contTitle">
+  <div class="wrap contact">
+    <div class="contact-info reveal">
+      <p class="eyebrow"><span class="eb-n">05</span>Contatti</p>
+      <h2 class="h2" id="contTitle">Parliamo <em>d&rsquo;arte</em></h2>
+      <p class="sec-lead">Per informazioni su un&rsquo;opera, per un acquisto o per commissionare un quadro. Rispondo entro 48 ore.</p>
+
+      <ul class="channels">
+        <li>
+          <a class="channel" href="https://wa.me/393403038995" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>
+            <span><small>WhatsApp</small>Scrivimi un messaggio</span>
+          </a>
+        </li>
+        <li>
+          <a class="channel" href="tel:+393403038995">
+            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6"><path stroke-linecap="round" stroke-linejoin="round" d="M4 5.5A1.5 1.5 0 0 1 5.5 4h2.3a1 1 0 0 1 .95.68l1.1 3.3a1 1 0 0 1-.5 1.2l-1.6.8a11 11 0 0 0 5.27 5.27l.8-1.6a1 1 0 0 1 1.2-.5l3.3 1.1a1 1 0 0 1 .68.95v2.3A1.5 1.5 0 0 1 18.5 20h-.5C10.27 20 4 13.73 4 6v-.5Z"/></svg>
+            <span><small>Telefono</small>340 303 8995</span>
+          </a>
+        </li>
+        <li>
+          <a class="channel" href="https://www.instagram.com/projects.luisa" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6" fill="currentColor"/></svg>
+            <span><small>Instagram</small>@projects.luisa</span>
+          </a>
+        </li>
+      </ul>
+      <p class="contact-place">Firenze &mdash; spedizioni gratuite in tutta Italia. Le opere sono visibili anche su <a href="https://www.artegante.it/luisa.foschi" target="_blank" rel="noopener noreferrer">Artegante</a>.</p>
     </div>
 
-    <div class="works-grid" id="worksGrid" aria-live="polite"></div>
-
-    <div class="gallery-foot">
-      <button class="show-all-btn" id="showBtn" hidden>Vedi tutte le opere</button>
-    </div>
-  </div>
-</section>
-
-<!-- CONTATTO -->
-<section id="contact">
-  <div class="wrap">
-    <div class="contact-grid">
-
-      <div class="reveal">
-        <span class="section-tag">Contatti</span>
-        <h2 class="contact-title">Parliamo<br><em>d&rsquo;Arte</em></h2>
-        <p class="contact-sub">Per informazioni su un&rsquo;opera, per un acquisto o per commissionare un quadro. Rispondo entro 48 ore.</p>
-        <div class="contact-info">
-          <div class="c-row">
-            <div class="c-icon"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="rgba(184,151,106,.9)" stroke-width="1.5"><path stroke-linecap="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg></div>
-            <div><span class="c-lbl">Telefono</span><span class="c-val">340&thinsp;303&thinsp;8995</span></div>
-          </div>
-          <div class="c-row">
-            <div class="c-icon"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="rgba(184,151,106,.9)" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><path stroke-linecap="round" d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zM17.5 6.5h.01"/></svg></div>
-            <div><span class="c-lbl">Instagram</span><span class="c-val">@projects.luisa</span></div>
-          </div>
-          <div class="c-row">
-            <div class="c-icon"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="rgba(184,151,106,.9)" stroke-width="1.5"><path stroke-linecap="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
-            <div><span class="c-lbl">Citt&agrave;</span><span class="c-val">Firenze &mdash; spedizioni in tutta Italia</span></div>
-          </div>
+    <div class="form-card reveal">
+      <form class="form" id="contactForm" novalidate>
+        <h3 class="form-title">Scrivimi</h3>
+        <div class="form-row">
+          <div class="fg"><label for="f-nome">Nome *</label><input id="f-nome" name="nome" type="text" required autocomplete="given-name"><p class="fg-err" id="e-nome">Inserisci il tuo nome</p></div>
+          <div class="fg"><label for="f-cog">Cognome *</label><input id="f-cog" name="cognome" type="text" required autocomplete="family-name"><p class="fg-err" id="e-cog">Inserisci il tuo cognome</p></div>
         </div>
-        <div class="contact-socials">
-          <a href="https://www.instagram.com/projects.luisa" target="_blank" rel="noopener noreferrer" class="c-soc">Instagram</a>
-          <a href="https://www.artegante.it/luisa.foschi"    target="_blank" rel="noopener noreferrer" class="c-soc">Artegante</a>
+        <div class="form-row">
+          <div class="fg"><label for="f-email">Email *</label><input id="f-email" name="email" type="email" required autocomplete="email" inputmode="email"><p class="fg-err" id="e-email">Inserisci un&rsquo;email valida</p></div>
+          <div class="fg"><label for="f-tel">Telefono</label><input id="f-tel" name="telefono" type="tel" autocomplete="tel" inputmode="tel"></div>
         </div>
+        <div class="fg">
+          <label for="f-obj">Tipo di richiesta</label>
+          <select id="f-obj" name="richiesta">
+            <option value="">&mdash; Seleziona &mdash;</option>
+            <option value="acquisto">Acquisto di un&rsquo;opera</option>
+            <option value="commissione">Quadro su commissione</option>
+            <option value="ritratto">Ritratto da fotografia</option>
+            <option value="info">Informazioni generali</option>
+            <option value="spazio">Offro uno spazio espositivo</option>
+          </select>
+        </div>
+        <div class="fg" id="f-opera-wrap" hidden>
+          <label for="f-opera">Opera di interesse</label>
+          <input id="f-opera" name="opera" type="text" list="opereList" placeholder="Titolo dell&rsquo;opera">
+          <datalist id="opereList"></datalist>
+        </div>
+        <div class="fg"><label for="f-msg">Messaggio *</label><textarea id="f-msg" name="messaggio" rows="5" required></textarea><p class="fg-err" id="e-msg">Scrivi il tuo messaggio</p></div>
+        <button type="submit" class="btn btn-solid btn-block form-submit">Invia il messaggio</button>
+        <p class="form-note" id="formNote">I tuoi dati servono solo a rispondere alla tua richiesta.</p>
+      </form>
+      <p class="form-err" id="formErr" role="alert" hidden></p>
+      <div class="form-ok" id="formOk" role="status" hidden>
+        <p class="form-ok-title">Grazie per il tuo messaggio.</p>
+        <p>Ti rispondo entro 48 ore.</p>
       </div>
-
-      <div class="reveal">
-        <form class="form-wrap" id="contactForm" novalidate>
-          <div class="form-row">
-            <div class="fg"><label for="f-nome">Nome *</label><input id="f-nome" name="nome" type="text" placeholder="Il tuo nome" required autocomplete="given-name"></div>
-            <div class="fg"><label for="f-cog">Cognome *</label><input id="f-cog" name="cognome" type="text" placeholder="Il tuo cognome" required autocomplete="family-name"></div>
-          </div>
-          <div class="fg"><label for="f-email">Email *</label><input id="f-email" name="email" type="email" placeholder="email@esempio.it" required autocomplete="email"></div>
-          <div class="fg"><label for="f-tel">Telefono</label><input id="f-tel" name="telefono" type="tel" placeholder="+39 000 000 0000" autocomplete="tel"></div>
-          <div class="fg">
-            <label for="f-obj">Tipo di richiesta</label>
-            <select id="f-obj" name="richiesta">
-              <option value="">&#8212; Seleziona &#8212;</option>
-              <option value="acquisto">Acquisto opera esistente</option>
-              <option value="commissione">Quadro su commissione</option>
-              <option value="ritratto">Ritratto da fotografia</option>
-              <option value="info">Informazioni generali</option>
-              <option value="spazio">Offro spazio espositivo</option>
-            </select>
-          </div>
-          <div class="fg hidden" id="f-opera-wrap">
-            <label for="f-opera">Opera di interesse</label>
-            <input id="f-opera" name="opera" type="text" placeholder="Titolo dell&rsquo;opera">
-          </div>
-          <div class="fg"><label for="f-msg">Messaggio *</label><textarea id="f-msg" name="messaggio" placeholder="Descrivimi la tua richiesta..." required></textarea></div>
-          <button type="submit" class="form-submit" aria-label="Invia il messaggio di contatto">Invia il Messaggio</button>
-        </form>
-        <p class="form-err" id="formErr" hidden></p>
-        <div class="form-ok" id="formOk">
-          Grazie per il tuo messaggio.<br>Ti rispondo entro 48 ore.
-        </div>
-      </div>
-
     </div>
   </div>
 </section>
+
+</main>
 
 <!-- FOOTER -->
 <footer class="footer">
-  <span class="footer-logo">Luisa Foschi</span>
-  <span class="footer-copy">&copy; 2025 Luisa Foschi &middot; Firenze &middot; Tutti i diritti riservati</span>
-  <nav class="footer-links" aria-label="Link footer">
-    <a href="https://www.instagram.com/projects.luisa" target="_blank" rel="noopener noreferrer">Instagram</a>
-    <a href="https://www.artegante.it/luisa.foschi"    target="_blank" rel="noopener noreferrer">Artegante</a>
-  </nav>
+  <div class="wrap footer-in">
+    <div>
+      <p class="footer-logo">Luisa <em>Foschi</em></p>
+      <p class="footer-sub">Pittrice &middot; Firenze</p>
+    </div>
+    <nav class="footer-links" aria-label="Link utili">
+      <a href="#opere">Opere</a>
+      <a href="#artista">L&rsquo;artista</a>
+      <a href="#mostre">Mostre</a>
+      <a href="#contatti">Contatti</a>
+      <a href="https://www.instagram.com/projects.luisa" target="_blank" rel="noopener noreferrer">Instagram</a>
+      <a href="https://www.artegante.it/luisa.foschi" target="_blank" rel="noopener noreferrer">Artegante</a>
+    </nav>
+    <p class="footer-copy">&copy; <span id="year">2026</span> Luisa Foschi &middot; Tutti i diritti riservati. Le immagini delle opere sono protette dal diritto d&rsquo;autore.</p>
+  </div>
 </footer>
 
-<!-- MODAL -->
-<div class="modal-bg" id="modalBg" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-  <div class="modal-sheet" id="modalSheet">
-    <button class="modal-close-btn" id="modalClose" aria-label="Chiudi">&times;</button>
-    <div class="modal-img-wrap" id="modalImgWrap">
-      <img src="" alt="" id="modalImg">
+<!-- SCHEDA OPERA -->
+<dialog class="detail" id="detail" aria-labelledby="dTitle">
+  <div class="d-wrap" id="dWrap">
+    <div class="d-stage" id="dStage">
+      <button class="d-nav d-prev" id="dPrev" type="button" aria-label="Opera precedente">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="d-figure" id="dZoomBtn" type="button" aria-label="Ingrandisci l'immagine">
+        <img id="dImg" src="data:," alt="">
+        <span class="d-zoom-hint" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M16 16l4 4M11 8.5v5M8.5 11h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          Ingrandisci
+        </span>
+      </button>
+      <button class="d-nav d-next" id="dNext" type="button" aria-label="Opera successiva">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <p class="d-count" id="dCount" aria-live="polite"></p>
     </div>
-    <div class="modal-body">
-      <p class="modal-tech"  id="modalTech"></p>
-      <h2 class="modal-title" id="modalTitle"></h2>
-      <p class="modal-meta"  id="modalMeta"></p>
-      <div class="modal-rule"></div>
-      <p class="modal-desc"  id="modalDesc"></p>
-      <div class="modal-foot">
-        <p class="modal-price-lbl">Prezzo</p>
-        <p class="modal-price" id="modalPrice"></p>
-        <p class="modal-note">Pezzo unico &middot; Certificato di autenticit&agrave; incluso &middot; Spedizione gratuita in Italia</p>
-        <button class="modal-req-btn" id="modalReqBtn">Richiedi informazioni su quest&rsquo;opera</button>
+
+    <div class="d-info">
+      <p class="eyebrow" id="dTech"></p>
+      <h2 class="d-title" id="dTitle" tabindex="-1"></h2>
+      <dl class="d-facts">
+        <div><dt>Realizzata</dt><dd id="dYear"></dd></div>
+        <div><dt>Dimensioni</dt><dd id="dSize"></dd></div>
+        <div><dt>Tiratura</dt><dd>Pezzo unico</dd></div>
+      </dl>
+      <div class="d-desc" id="dDesc"></div>
+
+      <div class="d-buy" id="dBuy">
+        <p class="d-price-lbl">Prezzo</p>
+        <p class="d-price" id="dPrice"></p>
+        <ul class="d-trust">
+          <li>Opera originale firmata</li>
+          <li>Certificato di autenticit&agrave;</li>
+          <li>Spedizione gratuita in Italia</li>
+          <li>Visibile dal vivo a Firenze</li>
+        </ul>
+        <div class="d-ctas">
+          <button class="btn btn-solid btn-block" id="dReq" type="button">Richiedi informazioni</button>
+          <a class="btn btn-wa btn-block" id="dWa" href="https://wa.me/393403038995" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z" fill="currentColor"/></svg>
+            Scrivi su WhatsApp
+          </a>
+        </div>
+        <p class="d-alt"><a href="tel:+393403038995">Oppure chiama 340&nbsp;303&nbsp;8995</a><span aria-hidden="true"> &middot; </span><button type="button" class="link-btn" id="dShare">Condividi l&rsquo;opera</button></p>
       </div>
     </div>
-  </div>
-</div>
 
-<!-- BACK TO TOP -->
-<button class="btt" id="btt" aria-label="Torna in cima">
-  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-    <path d="M7 11V3M3 7l4-4 4 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  </svg>
+    <!-- barra fissa su smartphone: prezzo sempre visibile -->
+    <div class="d-bar" id="dBar">
+      <div><span class="d-bar-lbl">Prezzo</span><span class="d-bar-price" id="dBarPrice"></span></div>
+      <button class="btn btn-solid" id="dBarReq" type="button">Richiedi info</button>
+    </div>
+  </div>
+
+  <button class="d-close" id="dClose" type="button" aria-label="Chiudi la scheda dell'opera">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+  </button>
+
+  <div class="zoom" id="zoom" hidden>
+    <img id="zoomImg" src="data:," alt="">
+    <button class="zoom-close" id="zoomClose" type="button" aria-label="Chiudi l'ingrandimento">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</dialog>
+
+<p class="toast" id="toast" role="status" aria-live="polite" hidden></p>
+
+<!-- barra di navigazione rapida su smartphone -->
+<nav class="mnav" id="mnav" aria-label="Navigazione rapida">
+  <a href="#opere"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="9" rx="1"/><rect x="13.5" y="3.5" width="7" height="6" rx="1"/><rect x="3.5" y="15.5" width="7" height="5" rx="1"/><rect x="13.5" y="12.5" width="7" height="8" rx="1"/></svg><span>Opere</span></a>
+  <a href="#artista"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.8"/><path d="M4.5 20.5c1.2-4 4.1-6 7.5-6s6.3 2 7.5 6"/></svg><span>L&rsquo;artista</span></a>
+  <a href="#mostre"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="1.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg><span>Mostre</span></a>
+  <a href="#contatti"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5h16v10H9l-5 4v-14Z"/></svg><span>Contatti</span></a>
+</nav>
+
+<button class="btt" id="btt" type="button" aria-label="Torna in cima">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
 </button>
 
 </body>
