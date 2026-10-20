@@ -128,6 +128,21 @@ window.OPERE = [
     "descrizione": "Rappresentazione di figura femminile. La Neve è femmina, la Neve è fredda… come a volte sentiamo freddo in fondo alla nostra anima."
   },
   {
+    "id": "opera-mvh0vv4c",
+    "titolo": "Speranza",
+    "anno": "2023",
+    "mese": 4,
+    "tecnica": "Acrilico su tela",
+    "dimensioni": "40×60 cm",
+    "prezzo": 380,
+    "immagine": "assets/img/opere/opera-mvh0vv4c.jpg",
+    "miniatura": "assets/img/opere/opera-mvh0vv4c-sm.jpg",
+    "webp": true,
+    "ar": 0.6644,
+    "colore": "#af7b21",
+    "descrizione": "Speranza\n\nLa speranza è questo: la capacità di danzare sopra le proprie paure, con il cuore aperto alla vita e la certezza che, anche nei momenti più bui, esiste sempre una luce che ci guida. 💛\n\nOmaggio a Jason Lavengood"
+  },
+  {
     "id": "anima",
     "titolo": "Anima",
     "anno": "2023",
