@@ -90,8 +90,8 @@ window.OPERE = [
     "titolo": "Sospesa nel tempo... in attesa di tutto e di niente",
     "anno": "2025",
     "tecnica": "Olio, rilievi in gesso e oro su tela",
-    "dimensioni": "50×70 cm",
-    "prezzo": 390,
+    "dimensioni": "50×60 cm",
+    "prezzo": 440,
     "immagine": "assets/img/opere/sospesa-nel-tempo.jpg",
     "miniatura": "assets/img/opere/sospesa-nel-tempo-sm.jpg",
     "webp": true,
@@ -249,7 +249,7 @@ window.OPERE = [
     "immagine": "assets/img/opere/roses.jpg",
     "miniatura": "assets/img/opere/roses-sm.jpg",
     "webp": true,
-    "ar": 1.0,
+    "ar": 1,
     "colore": "#706250",
     "descrizione": "Un’opera che attira molti sguardi, selezionata per varie iniziative."
   },
@@ -319,7 +319,7 @@ window.OPERE = [
     "immagine": "assets/img/opere/morgana.jpg",
     "miniatura": "assets/img/opere/morgana-sm.jpg",
     "webp": true,
-    "ar": 1.0,
+    "ar": 1,
     "colore": "#6c695d",
     "descrizione": "Morgana la fata… fata misteriosa e dal nome magico. Racchiude un fascino coinvolgente che immobilizza, ipnotizza, paralizza. Ci lasciamo piacevolmente ammaliare dal suo sguardo: ci rende forti e vincenti."
   },

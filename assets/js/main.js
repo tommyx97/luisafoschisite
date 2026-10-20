@@ -77,7 +77,7 @@
   function markLoaded(img) { if (img.complete && img.naturalWidth) img.classList.add('is-loaded'); }
   document.addEventListener('load', function (e) {
     var im = e.target;
-    if (im.tagName === 'IMG' && im.closest('.tile-art, .work-frame')) im.classList.add('is-loaded');
+    if (im.tagName === 'IMG' && im.closest('.tile-art, .work-pic')) im.classList.add('is-loaded');
   }, true);
 
   function byId(id) { for (var i = 0; i < OPERE.length; i++) if (OPERE[i].id === id) return OPERE[i]; return null; }
@@ -113,13 +113,12 @@
     var meta = [o.anno, o.dimensioni, o.tecnica].filter(Boolean).join(' · ');
     return '<article class="work' + (fresh ? ' is-new' : '') + '">' +
       '<a class="work-link" href="#opera/' + esc(o.id) + '" data-id="' + esc(o.id) + '">' +
-        '<div class="work-frame" style="--ar:' + ratioOf(o).toFixed(4) + bg(o) + '">' +
-          picture(o, '(min-width:1100px) 290px, (min-width:640px) 31vw, 34vw', 'alt="' + esc(altText(o)) + '" loading="lazy" decoding="async"') +
-          (isNew(o) ? '<span class="work-badge">Nuova</span>' : '') +
-          (isSold(o) ? '<span class="work-sold">Venduta</span>' : '') +
+        '<div class="work-frame"><div class="work-pic" style="--ar:' + ratioOf(o).toFixed(4) + bg(o) + '">' +
+          picture(o, '(min-width:1100px) 250px, (min-width:640px) 27vw, 30vw', 'alt="' + esc(altText(o)) + '" loading="lazy" decoding="async"') +
           '<span class="work-cta" aria-hidden="true">Scopri l’opera</span>' +
-        '</div>' +
+        '</div></div>' +
         '<div class="work-label">' +
+          (isNew(o) ? '<span class="work-tag">Nuova</span>' : isSold(o) ? '<span class="work-tag sold">Venduta</span>' : '') +
           '<div class="work-row"><h3 class="work-title">' + esc(o.titolo) + '</h3>' +
           '<p class="work-price">' + esc(fmtPrezzo(o.prezzo)) + '</p></div>' +
           '<p class="work-meta">' + esc(meta) + '</p>' +
@@ -140,7 +139,7 @@
       var o = list[k], best = 0;
       for (var j = 1; j < cols; j++) if (h[j] < h[best] - 0.05) best = j;
       html[best].push(cardHTML(o, k >= shown && shown > 0));
-      h[best] += 1 / ratioOf(o) + 0.32;
+      h[best] += 0.85 / ratioOf(o) + 0.5;
     }
     works.innerHTML = html.map(function (c) { return '<div class="works-col">' + c.join('') + '</div>'; }).join('');
     works.querySelectorAll('img').forEach(markLoaded);
@@ -606,7 +605,7 @@
   // voce del menu attiva in base alla sezione visibile
   if ('IntersectionObserver' in window) {
     var links = {};
-    document.querySelectorAll('#navLinks a[href^="#"], #mnav a[href^="#"]').forEach(function (a) {
+    document.querySelectorAll('#navLinks a[href^="#"], #mnav a[href^="#"], .nav-cta-desk').forEach(function (a) {
       var k = a.getAttribute('href').slice(1); (links[k] = links[k] || []).push(a);
     });
     var secObs = new IntersectionObserver(function (entries) {
