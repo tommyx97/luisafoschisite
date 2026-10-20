@@ -4,181 +4,630 @@
 
   var CFG = window.LF_CONFIG || {};
   var OPERE = Array.isArray(window.OPERE) ? window.OPERE : [];
-  var SHOW_N = CFG.opereVisibili || 6;
+  var SHOW_N = CFG.opereVisibili || 8;
+  var WA = CFG.whatsapp || '';
+  var root = document.documentElement;
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var $ = function (id) { return document.getElementById(id); };
 
+  /* ── UTILITÀ ── */
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
     });
   }
+  function slugify(s) {
+    return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+      .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  }
   function fmtPrezzo(p) {
     if (p === '' || p == null) return 'Su richiesta';
-    if (typeof p === 'number') return '\u20ac\u202f' + p.toLocaleString('it-IT');
+    if (typeof p === 'number') return '€ ' + p.toLocaleString('it-IT');
     return String(p);
   }
+  function priceNum(o) { return typeof o.prezzo === 'number' ? o.prezzo : null; }
+  function isSold(o) { return typeof o.prezzo === 'string' && /vendut/i.test(o.prezzo); }
+  function altText(o) {
+    return o.titolo + (o.tecnica ? ', ' + o.tecnica.toLowerCase() : '') + (o.dimensioni ? ', ' + o.dimensioni : '') + ' — Luisa Foschi';
+  }
+  function waLink(text) { return 'https://wa.me/' + WA + (text ? '?text=' + encodeURIComponent(text) : ''); }
+  function scrollToEl(el) { el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' }); }
+  var toastT;
+  function toast(msg) {
+    var t = $('toast'); t.textContent = msg; t.hidden = false;
+    clearTimeout(toastT); toastT = setTimeout(function () { t.hidden = true; }, 2600);
+  }
+
+  OPERE.forEach(function (o, i) {
+    if (!o.id) o.id = slugify(o.titolo) || 'opera-' + (i + 1);
+    if (!o.miniatura) o.miniatura = o.immagine;
+    o._i = i;
+  });
+
+  /* ── DATA DELLE OPERE: ordine dalla più recente e etichetta "Nuova" automatica ── */
+  var MESI = ['gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno', 'luglio', 'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre'];
+  var OGGI = new Date(), OGGI_M = OGGI.getFullYear() * 12 + OGGI.getMonth();
+  var MESI_NOVITA = CFG.mesiNovita > 0 ? +CFG.mesiNovita : 6;
+  function annoMese(o) { return { y: parseInt(o.anno, 10) || 0, m: Math.min(12, Math.max(0, parseInt(o.mese, 10) || 0)) }; }
+  function dateKey(o) { var d = annoMese(o); return d.y * 100 + d.m; }
+  // "Nuova" solo se anno e mese sono noti e l'opera è degli ultimi MESI_NOVITA mesi
+  function isNew(o) {
+    var d = annoMese(o); if (!d.y || !d.m) return false;
+    var age = OGGI_M - (d.y * 12 + d.m - 1);
+    return age >= -1 && age < MESI_NOVITA;
+  }
+  function dataLabel(o) { var d = annoMese(o); return d.m ? MESI[d.m - 1] + ' ' + d.y : (o.anno || ''); }
+  OPERE.sort(function (a, b) { return dateKey(b) - dateKey(a) || a._i - b._i; });
+  OPERE.forEach(function (o, i) { o._i = i; });
+  // percorsi immagini: con webp:true esistono anche <nome>.webp, <nome>-sm.webp, <nome>-xs.webp
+  function base(o) { return String(o.immagine || '').replace(/\.(jpe?g|png)$/i, ''); }
+  function picture(o, sizes, attrs) {
+    var img = '<img src="' + esc(o.miniatura) + '" ' + attrs + '>';
+    if (!o.webp) return img;
+    var b = esc(base(o));
+    return '<picture><source type="image/webp" srcset="' + b + '-xs.webp 420w, ' + b + '-sm.webp 720w" sizes="' + sizes + '">' + img + '</picture>';
+  }
+  var WEBP = false;
+  (function () { var t = new Image(); t.onload = function () { WEBP = t.width > 0; }; t.src = 'data:image/webp;base64,UklGRiIAAABXRUJQVlA4IBYAAAAwAQCdASoBAAEADsD+JaQAA3AAAAAA'; })();
+  function bigSrc(o) { return o.webp && WEBP ? base(o) + '.webp' : o.immagine; }
+  function midSrc(o) { return o.webp && WEBP ? base(o) + '-sm.webp' : o.miniatura; }
+
+  function byId(id) { for (var i = 0; i < OPERE.length; i++) if (OPERE[i].id === id) return OPERE[i]; return null; }
 
   /* ── GALLERIA ── */
-  var grid = $('worksGrid');
-  var showBtn = $('showBtn');
-  var expanded = false;
+  var works = $('works'), showAll = $('showAll');
+  var order = 'recenti', list = OPERE.slice(), expanded = false;
 
+  function sortedList() {
+    var l = OPERE.slice();
+    if (order === 'prezzo-asc' || order === 'prezzo-desc') {
+      var dir = order === 'prezzo-asc' ? 1 : -1;
+      l.sort(function (a, b) {
+        var pa = priceNum(a), pb = priceNum(b);
+        if (pa === null && pb === null) return a._i - b._i;
+        if (pa === null) return 1;
+        if (pb === null) return -1;
+        return (pa - pb) * dir || a._i - b._i;
+      });
+    }
+    return l;
+  }
+
+  function ratioOf(o) {
+    if (o.ar > 0) return +o.ar;
+    var m = String(o.dimensioni || '').match(/(\d+(?:[.,]\d+)?)\s*[×xX]\s*(\d+(?:[.,]\d+)?)/);
+    if (!m) return 0.8;
+    var w = parseFloat(m[1].replace(',', '.')), h = parseFloat(m[2].replace(',', '.'));
+    return w && h ? w / h : 0.8;
+  }
+
+  function cardHTML(o, fresh) {
+    var meta = [o.anno, o.dimensioni, o.tecnica].filter(Boolean).join(' · ');
+    return '<article class="work' + (fresh ? ' is-new' : '') + '">' +
+      '<a class="work-link" href="#opera/' + esc(o.id) + '" data-id="' + esc(o.id) + '">' +
+        '<div class="work-frame" style="--ar:' + ratioOf(o).toFixed(4) + '">' +
+          picture(o, '(min-width:1100px) 290px, (min-width:640px) 31vw, 34vw', 'alt="' + esc(altText(o)) + '" loading="lazy" decoding="async"') +
+          (isNew(o) ? '<span class="work-badge">Nuova</span>' : '') +
+          (isSold(o) ? '<span class="work-sold">Venduta</span>' : '') +
+          '<span class="work-cta" aria-hidden="true">Scopri l’opera</span>' +
+        '</div>' +
+        '<div class="work-label">' +
+          '<div class="work-row"><h3 class="work-title">' + esc(o.titolo) + '</h3>' +
+          '<p class="work-price">' + esc(fmtPrezzo(o.prezzo)) + '</p></div>' +
+          '<p class="work-meta">' + esc(meta) + '</p>' +
+        '</div>' +
+      '</a></article>';
+  }
+
+  // colonne sfalsate: ogni quadro va nella colonna più corta, così le proporzioni restano vere
+  function colCount() { return window.innerWidth >= 1100 ? 4 : window.innerWidth >= 640 ? 3 : 2; }
+  var cols = 0, shown = 0;
   function renderGallery() {
-    grid.innerHTML = OPERE.map(function (o, i) {
-      var meta = [o.anno, o.dimensioni].filter(Boolean).join(' \u00b7 ');
-      return '<article class="card' + (i >= SHOW_N ? ' hidden-w' : '') + '" data-i="' + i + '" tabindex="0" role="button" aria-label="Dettagli: ' + esc(o.titolo) + '">' +
-        '<div class="card-img"><img src="' + esc(o.immagine) + '" alt="' + esc(o.titolo) + ' \u2014 Luisa Foschi" loading="' + (i < 4 ? 'eager' : 'lazy') + '" decoding="async">' +
-        '<div class="card-ov"><span>Vedi opera</span></div></div>' +
-        '<div class="card-info"><h3 class="card-title">' + esc(o.titolo) + '</h3>' +
-        '<div class="card-bottom"><span class="card-meta">' + esc(meta) + (o.tecnica ? '<br>' + esc(o.tecnica) : '') + '</span>' +
-        '<span class="card-price">' + esc(fmtPrezzo(o.prezzo)) + '</span></div>' +
-        '<span class="card-btn">Dettagli</span></div></article>';
-    }).join('');
-
-    var stat = $('statOpere');
-    if (stat) stat.textContent = OPERE.length;
-
-    if (OPERE.length > SHOW_N) { showBtn.hidden = false; updateShowLabel(); }
+    list = sortedList();
+    var n = expanded ? list.length : Math.min(SHOW_N, list.length);
+    cols = colCount();
+    var html = [], h = [];
+    for (var c = 0; c < cols; c++) { html.push([]); h.push(0); }
+    for (var k = 0; k < n; k++) {
+      var o = list[k], best = 0;
+      for (var j = 1; j < cols; j++) if (h[j] < h[best] - 0.05) best = j;
+      html[best].push(cardHTML(o, k >= shown && shown > 0));
+      h[best] += 1 / ratioOf(o) + 0.32;
+    }
+    works.innerHTML = html.map(function (c) { return '<div class="works-col">' + c.join('') + '</div>'; }).join('');
+    shown = n;
+    showAll.hidden = list.length <= SHOW_N;
+    updateShowLabel();
   }
   function updateShowLabel() {
-    showBtn.textContent = expanded ? 'Mostra meno \u2191' : 'Vedi tutte le ' + OPERE.length + ' opere \u2193';
-    showBtn.setAttribute('aria-expanded', String(expanded));
+    showAll.textContent = expanded ? 'Mostra meno' : 'Vedi tutte le ' + list.length + ' opere';
+    showAll.setAttribute('aria-expanded', String(expanded));
   }
-  showBtn.addEventListener('click', function () {
-    expanded = !expanded;
-    grid.querySelectorAll('.card.hidden-w').forEach(function (c) { c.classList.toggle('shown', expanded); });
-    updateShowLabel();
-    if (expanded) {
-      var first = grid.querySelector('.card.hidden-w.shown');
-      if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  function setExpanded(v) {
+    expanded = v;
+    if (!v) shown = 0;
+    renderGallery();
+  }
+  showAll.addEventListener('click', function () {
+    setExpanded(!expanded);
+    if (!expanded) scrollToEl($('opere'));
+  });
+  window.addEventListener("resize", function () { if (colCount() !== cols) { shown = 0; renderGallery(); } });
+
+  document.querySelectorAll('.sort-btn').forEach(function (b) {
+    b.addEventListener('click', function () {
+      if (order === b.dataset.sort) return;
+      order = b.dataset.sort;
+      document.querySelectorAll('.sort-btn').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+      shown = 0;
+      renderGallery();
+    });
+  });
+
+  works.addEventListener('click', function (e) {
+    var a = e.target.closest('.work-link');
+    if (!a || e.metaKey || e.ctrlKey || e.shiftKey || e.button > 0) return;
+    e.preventDefault();
+    openDetail(a.dataset.id);
+  });
+
+  /* ── SCHEDA OPERA ── */
+  var dlg = $('detail'), dWrap = $('dWrap'), dImg = $('dImg'), zoom = $('zoom');
+  var cur = -1, pushed = false, afterClose = null, deepLinked = false;
+
+  function hashId() {
+    var m = location.hash.match(/^#opera\/([a-z0-9-]+)/i);
+    return m ? m[1] : null;
+  }
+  function indexOf(id) {
+    for (var i = 0; i < list.length; i++) if (list[i].id === id) return i;
+    return -1;
+  }
+
+  function fill(o) {
+    $('dTech').textContent = o.tecnica || '';
+    $('dTitle').textContent = o.titolo;
+    $('dYear').textContent = dataLabel(o) || '—';
+    $('dSize').textContent = o.dimensioni || '—';
+    $('dDesc').innerHTML = String(o.descrizione || '').split(/\n{2,}/).map(function (p) {
+      return '<p>' + esc(p).replace(/\n/g, '<br>') + '</p>';
+    }).join('');
+    $('dPrice').textContent = fmtPrezzo(o.prezzo);
+    $('dBarPrice').textContent = fmtPrezzo(o.prezzo);
+    $('dCount').textContent = (cur + 1) + ' / ' + list.length;
+    var info = [o.anno, o.dimensioni, typeof o.prezzo === 'number' ? fmtPrezzo(o.prezzo) : ''].filter(Boolean).join(' · ');
+    $('dWa').href = waLink('Buongiorno Luisa, ho visto sul sito l’opera “' + o.titolo + '” (' + info + ') e vorrei ricevere maggiori informazioni.');
+
+    // prima la miniatura (già in memoria), poi la foto grande
+    dImg.alt = altText(o);
+    dImg.src = midSrc(o);
+    if (o.immagine !== o.miniatura) {
+      var big = new Image(), want = bigSrc(o);
+      big.onload = function () { if (list[cur] === o) dImg.src = want; };
+      big.src = want;
+    }
+    [list[(cur + 1) % list.length], list[(cur - 1 + list.length) % list.length]].forEach(function (n) {
+      if (n) { var im = new Image(); im.src = midSrc(n); }
+    });
+    dWrap.scrollTop = 0;
+    var di = dlg.querySelector('.d-info'); if (di) di.scrollTop = 0;
+  }
+
+  function openDetail(id, opts) {
+    opts = opts || {};
+    var i = indexOf(id); if (i < 0) return;
+    cur = i;
+    fill(list[cur]);
+    if (!dlg.open) {
+      deepLinked = !!opts.fromHash;
+      if (typeof dlg.showModal === 'function') dlg.showModal(); else dlg.setAttribute('open', '');
+      root.classList.add('is-locked');
+      $('dTitle').focus({ preventScroll: true });
+      if (opts.fromHash) pushed = false;
+      else { history.pushState({ lfOpera: id }, '', '#opera/' + id); pushed = true; }
     } else {
-      window.scrollTo({ top: $('gallery').offsetTop - 70, behavior: 'smooth' });
+      history.replaceState(history.state, '', '#opera/' + id);
     }
-  });
-
-  grid.addEventListener('click', function (e) {
-    var card = e.target.closest('.card');
-    if (card) openModal(+card.dataset.i);
-  });
-  grid.addEventListener('keydown', function (e) {
-    if (e.key !== 'Enter' && e.key !== ' ') return;
-    var card = e.target.closest('.card');
-    if (card) { e.preventDefault(); openModal(+card.dataset.i); }
-  });
-
-  /* ── MODAL ── */
-  var cur = null, lastFocus = null;
-  function openModal(i) {
-    var o = OPERE[i]; if (!o) return;
-    cur = o; lastFocus = document.activeElement;
-    var img = $('modalImg');
-    img.src = o.immagine;
-    img.alt = o.titolo + ' \u2014 Luisa Foschi';
-    $('modalTech').textContent = o.tecnica || '';
-    $('modalTitle').textContent = o.titolo;
-    $('modalMeta').textContent = ['Anno ' + (o.anno || '\u2014'), o.dimensioni, 'Pezzo unico'].filter(Boolean).join(' \u00b7 ');
-    $('modalDesc').textContent = o.descrizione || '';
-    $('modalPrice').textContent = fmtPrezzo(o.prezzo);
-    $('modalBg').classList.add('open');
-    document.body.style.overflow = 'hidden';
-    $('modalClose').focus();
   }
-  function closeModal() {
-    if (!$('modalBg').classList.contains('open')) return;
-    $('modalBg').classList.remove('open');
-    document.body.style.overflow = '';
-    if (lastFocus) lastFocus.focus();
-  }
-  $('modalClose').addEventListener('click', closeModal);
-  $('modalBg').addEventListener('click', function (e) { if (e.target === this) closeModal(); });
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { closeModal(); closeMenu(); } });
 
-  $('modalReqBtn').addEventListener('click', function () {
-    if (cur) {
-      $('f-obj').value = 'acquisto';
-      $('f-opera-wrap').classList.remove('hidden');
-      $('f-opera').value = cur.titolo + ' (' + cur.anno + ')';
-      $('f-msg').value = 'Buongiorno Luisa, sono interessato/a all\u2019opera \u201c' + cur.titolo + '\u201d (' + cur.anno + '). Potresti darmi maggiori informazioni?';
+  function step(delta) {
+    if (!list.length) return;
+    cur = (cur + delta + list.length) % list.length;
+    openDetail(list[cur].id);
+  }
+
+  function requestClose(cb) {
+    afterClose = cb || null;
+    if (pushed) { pushed = false; history.back(); }
+    else {
+      history.replaceState(null, '', location.pathname + location.search);
+      hideDetail();
     }
-    closeModal();
-    setTimeout(function () { $('contact').scrollIntoView({ behavior: 'smooth' }); }, 80);
+  }
+
+  function hideDetail() {
+    closeZoom(true);
+    if (dlg.open) { if (typeof dlg.close === 'function') dlg.close(); else dlg.removeAttribute('open'); }
+    root.classList.remove('is-locked');
+    var o = list[cur];
+    if (afterClose) { var c = afterClose; afterClose = null; setTimeout(c, 60); return; }
+    if (!o) return;
+    var link = works.querySelector('.work-link[data-id="' + o.id + '"]');
+    if (!link && !expanded && deepLinked) { setExpanded(true); link = works.querySelector('.work-link[data-id="' + o.id + '"]'); }
+    if (link) {
+      if (deepLinked) link.scrollIntoView({ block: 'center' });
+      link.focus({ preventScroll: !deepLinked });
+    }
+    deepLinked = false;
+  }
+
+  window.addEventListener('popstate', function () {
+    var id = hashId();
+    if (id && indexOf(id) >= 0) openDetail(id, { fromHash: true });
+    else if (dlg.open) { pushed = false; hideDetail(); }
   });
 
-  /* ── FORM ── */
+  $('dClose').addEventListener('click', function () { requestClose(); });
+  $('dPrev').addEventListener('click', function () { step(-1); });
+  $('dNext').addEventListener('click', function () { step(1); });
+  dlg.addEventListener('cancel', function (e) {
+    e.preventDefault();
+    if (!zoom.hidden) closeZoom(); else requestClose();
+  });
+  dlg.addEventListener('keydown', function (e) {
+    if (!zoom.hidden) return;
+    if (e.key === 'ArrowLeft') { e.preventDefault(); step(-1); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); step(1); }
+  });
+
+  // swipe su smartphone
+  var tx = 0, ty = 0;
+  $('dStage').addEventListener('touchstart', function (e) { tx = e.touches[0].clientX; ty = e.touches[0].clientY; }, { passive: true });
+  $('dStage').addEventListener('touchend', function (e) {
+    var dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.3) step(dx < 0 ? 1 : -1);
+  }, { passive: true });
+
+  // ingrandimento
+  function openZoom() {
+    var o = list[cur]; if (!o) return;
+    $('zoomImg').src = bigSrc(o); $('zoomImg').alt = altText(o);
+    zoom.hidden = false;
+    $('zoomClose').focus();
+  }
+  function closeZoom(silent) {
+    if (zoom.hidden) return;
+    zoom.hidden = true;
+    if (!silent) $('dZoomBtn').focus();
+  }
+  $('dZoomBtn').addEventListener('click', openZoom);
+  zoom.addEventListener('click', function () { closeZoom(); });
+
+  // richiesta informazioni → modulo già compilato
+  function requestInfo() {
+    var o = list[cur];
+    requestClose(function () {
+      if (o) prefill(o);
+      scrollToEl($('contatti'));
+      setTimeout(function () { $('f-nome').focus({ preventScroll: true }); }, reduceMotion ? 0 : 700);
+    });
+  }
+  $('dReq').addEventListener('click', requestInfo);
+  $('dBarReq').addEventListener('click', requestInfo);
+
+  // la barra in basso (smartphone) sparisce quando il riquadro prezzo è visibile
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (en) {
+      $('dBar').classList.toggle('is-hidden', en[0].isIntersecting);
+    }, { root: dWrap, threshold: 0.2 }).observe($('dBuy'));
+  }
+
+  $('dShare').addEventListener('click', function () {
+    var o = list[cur]; if (!o) return;
+    var url = location.origin + location.pathname + '#opera/' + o.id;
+    if (navigator.share) {
+      navigator.share({ title: o.titolo + ' — Luisa Foschi', url: url }).catch(function () {});
+    } else if (navigator.clipboard) {
+      navigator.clipboard.writeText(url).then(function () { toast('Link dell’opera copiato'); }, function () { toast(url); });
+    } else toast(url);
+  });
+
+  /* ── PRIMA SCHERMATA: PARETE DI OPERE CHE SCORRE ── */
+  var wall = $('heroWall'), rows = [], rafId = 0, lastT = 0, pageScrollHold = 0;
+
+  function tileHTML(o, copy, j) {
+    var real = copy === 1, cap = fmtPrezzo(o.prezzo);
+    var eager = real && j < 5;
+    return '<a class="tile" href="#opera/' + esc(o.id) + '" data-id="' + esc(o.id) + '" draggable="false"' +
+      (real ? ' aria-label="' + esc(o.titolo + ', ' + [o.anno, o.dimensioni].filter(Boolean).join(', ') + ', ' + cap) + '"' : ' tabindex="-1" aria-hidden="true"') + '>' +
+      '<span class="tile-art" style="--ar:' + ratioOf(o).toFixed(4) + '">' +
+        picture(o, '(min-width:900px) 360px, 140px', 'alt="" draggable="false" decoding="async" loading="' + (eager ? 'eager' : 'lazy') + '"' + (real && j < 2 ? ' fetchpriority="high"' : '')) +
+        (isNew(o) ? '<span class="tile-badge">Nuova</span>' : '') +
+      '</span>' +
+      '<span class="tile-cap"><span class="tile-title">' + esc(o.titolo) + '</span><span class="tile-price">' + esc(cap) + '</span></span></a>';
+  }
+
+  function Row(el, items, dir) {
+    var r = this;
+    r.el = el; r.dir = dir; r.W = 0; r.pos = 0; r.speed = 20; r.hold = 0;
+    r.hover = false; r.focus = false; r.drag = null; r.moved = false; r.lastSet = -1;
+    // tre copie identiche: si scorre su quella centrale e si "riaggancia" senza salti
+    el.innerHTML = '<div class="row-track">' + [0, 1, 2].map(function (k) {
+      return '<div class="row-group"' + (k !== 1 ? ' aria-hidden="true"' : '') + '>' +
+        items.map(function (o, j) { return tileHTML(o, k, j); }).join('') + '</div>';
+    }).join('') + '</div>';
+
+    el.addEventListener('scroll', function () {
+      if (Math.abs(el.scrollLeft - r.lastSet) <= 1.5) return;   // scorrimento automatico
+      r.pos = el.scrollLeft; r.hold = performance.now() + 2500;    // scorrimento dell'utente
+      var before = r.pos; r.wrap();
+      if (r.pos !== before) el.scrollLeft = r.pos;
+      r.lastSet = el.scrollLeft;
+    }, { passive: true });
+
+    el.addEventListener('mouseenter', function () { r.hover = true; });
+    el.addEventListener('mouseleave', function () { r.hover = false; });
+    el.addEventListener('focusin', function () { r.focus = true; });
+    el.addEventListener('focusout', function (e) { if (!el.contains(e.relatedTarget)) r.focus = false; });
+
+    // trascinamento con il mouse
+    el.addEventListener('pointerdown', function (e) {
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
+      r.drag = { x: e.clientX, pos: r.pos }; r.moved = false;
+    });
+    window.addEventListener('pointermove', function (e) {
+      if (!r.drag) return;
+      var dx = e.clientX - r.drag.x;
+      if (!r.moved && Math.abs(dx) > 5) { r.moved = true; el.classList.add('is-drag'); }
+      if (!r.moved) return;
+      var target = r.drag.pos - dx;
+      r.pos = target; r.wrap(); r.drag.pos += r.pos - target;
+      el.scrollLeft = r.pos; r.lastSet = el.scrollLeft;
+    });
+    window.addEventListener('pointerup', function () {
+      if (!r.drag) return;
+      r.drag = null; r.hold = performance.now() + 1800;
+      setTimeout(function () { el.classList.remove('is-drag'); }, 0);
+    });
+    el.addEventListener('click', function (e) {
+      if (r.moved) { e.preventDefault(); e.stopPropagation(); r.moved = false; return; }
+      var t = e.target.closest('.tile');
+      if (!t || e.metaKey || e.ctrlKey || e.shiftKey || e.button > 0) return;
+      e.preventDefault();
+      openDetail(t.dataset.id);
+    });
+    el.addEventListener('dragstart', function (e) { e.preventDefault(); });
+  }
+  Row.prototype.wrap = function () {
+    if (this.pos < this.W * 0.5) this.pos += this.W;
+    else if (this.pos > this.W * 1.5) this.pos -= this.W;
+  };
+  Row.prototype.apply = function () {
+    this.wrap(); this.el.scrollLeft = this.pos; this.lastSet = this.el.scrollLeft;
+  };
+  Row.prototype.measure = function () {
+    var g = this.el.querySelector('.row-group:nth-child(2)');
+    var w = g ? g.getBoundingClientRect().width : 0;
+    if (!w) return;
+    // all'inizio il primo quadro parte intero, allineato al testo
+    var inset = this.el.clientWidth * (window.innerWidth >= 900 ? 0.055 : 0.04) * (this.dir > 0 ? 1 : 3);
+    this.pos = this.W ? w + (this.pos - this.W) * (w / this.W) : w - inset;
+    this.W = w;
+    var art = this.el.querySelector('.tile-art');
+    this.speed = (art ? art.offsetHeight : 250) * 0.085 * (this.dir > 0 ? 1 : 0.85);
+    this.apply();
+  };
+
+  function measureRows() { rows.forEach(function (r) { r.measure(); }); }
+  var measureQueued = false;
+  function queueMeasure() {
+    if (measureQueued) return; measureQueued = true;
+    requestAnimationFrame(function () { measureQueued = false; measureRows(); });
+  }
+
+  function tick(t) {
+    var dt = Math.min(0.05, (t - (lastT || t)) / 1000); lastT = t;
+    var run = !document.hidden && !dlg.open && t > pageScrollHold;
+    rows.forEach(function (r) {
+      if (run && r.W && !r.hover && !r.focus && !r.drag && t > r.hold) { r.pos += r.dir * r.speed * dt; r.apply(); }
+    });
+    rafId = requestAnimationFrame(tick);
+  }
+  function startDrift() { if (!rafId && !reduceMotion && rows.length) { lastT = 0; rafId = requestAnimationFrame(tick); } }
+  function stopDrift() { if (rafId) cancelAnimationFrame(rafId); rafId = 0; }
+
+  function buildWall() {
+    if (!wall || !OPERE.length) return;
+    var a = [], b = [];
+    OPERE.forEach(function (o, i) { (i % 2 ? b : a).push(o); });   // le più recenti in testa a entrambe le file
+    if (!b.length) b = a;
+    rows = [new Row($('row1'), a, 1), new Row($('row2'), b, -1)];
+
+    // proporzioni vere appena l'immagine arriva (le tre copie restano identiche)
+    wall.addEventListener('load', function (e) {
+      var im = e.target;
+      if (im.tagName !== 'IMG' || !im.naturalWidth) return;
+      var tile = im.closest('.tile'); if (!tile || tile.dataset.ar) return;
+      var ar = (im.naturalWidth / im.naturalHeight).toFixed(4);
+      wall.querySelectorAll('.tile[data-id="' + tile.dataset.id + '"]').forEach(function (t) {
+        t.dataset.ar = ar; t.querySelector('.tile-art').style.setProperty('--ar', ar);
+      });
+      queueMeasure();
+    }, true);
+
+    measureRows();
+    window.addEventListener('resize', queueMeasure);
+    // fuori schermo la parete si ferma: niente lavoro inutile per il telefono
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (en) {
+        if (en[0].isIntersecting) startDrift(); else stopDrift();
+      }).observe($('hero'));
+    } else startDrift();
+  }
+
+  /* ── MODULO CONTATTI ── */
   var form = $('contactForm');
   var submitBtn = form.querySelector('.form-submit');
-  var useWhatsApp = !CFG.formEndpoint && CFG.whatsapp;
-  if (useWhatsApp) submitBtn.textContent = 'Invia su WhatsApp';
+  var useWhatsApp = !CFG.formEndpoint && WA;
+  if (useWhatsApp) {
+    submitBtn.textContent = 'Invia su WhatsApp';
+    $('formNote').textContent = 'Si aprirà WhatsApp con il messaggio già pronto da inviare.';
+  }
 
-  $('f-obj').addEventListener('change', function () {
-    $('f-opera-wrap').classList.toggle('hidden', this.value !== 'acquisto');
+  $('opereList').innerHTML = OPERE.map(function (o) { return '<option value="' + esc(o.titolo + ' (' + o.anno + ')') + '">'; }).join('');
+
+  function toggleOpera() { $('f-opera-wrap').hidden = $('f-obj').value !== 'acquisto'; }
+  $('f-obj').addEventListener('change', toggleOpera);
+
+  function prefill(o) {
+    $('f-obj').value = 'acquisto';
+    toggleOpera();
+    $('f-opera').value = o.titolo + ' (' + o.anno + ')';
+    $('f-msg').value = 'Buongiorno Luisa, sono interessato/a all’opera “' + o.titolo + '” (' + o.anno + '). Potresti darmi maggiori informazioni?';
+    clearErr($('f-msg'));
+  }
+
+  $('commBtn').addEventListener('click', function () {
+    $('f-obj').value = 'commissione';
+    toggleOpera();
   });
 
-  function showDone() { form.hidden = true; $('formErr').hidden = true; $('formOk').style.display = 'block'; }
+  var rules = [
+    ['f-nome', 'e-nome', function (v) { return v.trim().length > 0; }],
+    ['f-cog', 'e-cog', function (v) { return v.trim().length > 0; }],
+    ['f-email', 'e-email', function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()); }],
+    ['f-msg', 'e-msg', function (v) { return v.trim().length > 0; }]
+  ];
+  function clearErr(el) {
+    var fg = el.closest('.fg'); if (fg) fg.classList.remove('has-error');
+    el.removeAttribute('aria-invalid');
+  }
+  rules.forEach(function (r) {
+    var el = $(r[0]);
+    el.setAttribute('aria-describedby', r[1]);
+    el.addEventListener('input', function () { clearErr(el); });
+  });
+  function validate() {
+    var firstBad = null;
+    rules.forEach(function (r) {
+      var el = $(r[0]), ok = r[2](el.value);
+      el.closest('.fg').classList.toggle('has-error', !ok);
+      if (ok) el.removeAttribute('aria-invalid'); else el.setAttribute('aria-invalid', 'true');
+      if (!ok && !firstBad) firstBad = el;
+    });
+    if (firstBad) firstBad.focus();
+    return !firstBad;
+  }
+
+  function showDone(extraHTML) {
+    form.hidden = true;
+    $('formErr').hidden = true;
+    var ok = $('formOk');
+    if (extraHTML) ok.insertAdjacentHTML('beforeend', extraHTML);
+    ok.hidden = false;
+    ok.setAttribute('tabindex', '-1');
+    ok.focus();
+  }
   function showErr(msg) { var el = $('formErr'); el.textContent = msg; el.hidden = false; }
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
-    if (!form.checkValidity()) { form.reportValidity(); return; }
+    if (!validate()) return;
     var d = new FormData(form);
     var sel = $('f-obj');
     var richiesta = sel.value ? sel.options[sel.selectedIndex].text : '';
 
     if (CFG.formEndpoint) {
-      submitBtn.disabled = true; submitBtn.textContent = 'Invio in corso\u2026';
+      submitBtn.disabled = true; submitBtn.textContent = 'Invio in corso…';
       fetch(CFG.formEndpoint, { method: 'POST', body: d, headers: { Accept: 'application/json' } })
         .then(function (r) { if (!r.ok) throw new Error(); showDone(); })
         .catch(function () {
-          submitBtn.disabled = false; submitBtn.textContent = 'Invia il Messaggio';
-          showErr('Invio non riuscito. Riprova tra poco oppure contattami al 340 303 8995.');
+          submitBtn.disabled = false; submitBtn.textContent = 'Invia il messaggio';
+          showErr('Invio non riuscito. Riprova tra poco oppure chiamami al ' + (CFG.telefonoVisibile || '340 303 8995') + '.');
         });
       return;
     }
     if (useWhatsApp) {
-      var txt = [
-        'Buongiorno Luisa, sono ' + d.get('nome') + ' ' + d.get('cognome') + '.',
+      var lines = [
+        'Buongiorno Luisa, sono ' + d.get('nome').trim() + ' ' + d.get('cognome').trim() + '.',
         richiesta ? 'Richiesta: ' + richiesta : '',
-        d.get('opera') ? 'Opera: ' + d.get('opera') : '',
-        '', d.get('messaggio'), '',
-        'Email: ' + d.get('email') + (d.get('telefono') ? ' \u00b7 Tel: ' + d.get('telefono') : '')
-      ].filter(function (l, i, a) { return l !== '' || (a[i - 1] && a[i - 1] !== ''); }).join('\n');
-      window.open('https://wa.me/' + CFG.whatsapp + '?text=' + encodeURIComponent(txt), '_blank', 'noopener');
-      showDone();
+        d.get('opera') && !$('f-opera-wrap').hidden ? 'Opera: ' + d.get('opera') : '',
+        '',
+        d.get('messaggio').trim(),
+        '',
+        'Email: ' + d.get('email').trim() + (d.get('telefono') ? ' · Tel: ' + d.get('telefono').trim() : '')
+      ].filter(function (l, i, a) { return l !== '' || (a[i - 1] && a[i - 1] !== ''); });
+      var url = waLink(lines.join('\n'));
+      window.open(url, '_blank', 'noopener');
+      showDone('<p class="form-note">WhatsApp non si è aperto? <a href="' + esc(url) + '" target="_blank" rel="noopener noreferrer" style="text-decoration:underline">Tocca qui</a></p>');
     }
   });
 
-  /* ── NAV ── */
+  /* ── NAVIGAZIONE ── */
   var nav = $('nav'), ham = $('ham'), navLinks = $('navLinks'), btt = $('btt');
-  function closeMenu() {
-    navLinks.classList.remove('is-open');
-    ham.classList.remove('is-open');
-    ham.setAttribute('aria-expanded', 'false');
-    if (!$('modalBg').classList.contains('open')) document.body.style.overflow = '';
-  }
-  ham.addEventListener('click', function () {
-    var open = navLinks.classList.toggle('is-open');
-    ham.classList.toggle('is-open', open);
+  function setMenu(open) {
+    navLinks.classList.toggle('is-open', open);
+    nav.classList.toggle('menu-open', open);
     ham.setAttribute('aria-expanded', String(open));
-    document.body.style.overflow = open ? 'hidden' : '';
+    ham.setAttribute('aria-label', open ? 'Chiudi il menu' : 'Apri il menu');
+    root.classList.toggle('is-locked', open);
+    if (open) { var f = navLinks.querySelector('a'); if (f) f.focus(); }
+  }
+  ham.addEventListener('click', function () { setMenu(!navLinks.classList.contains('is-open')); });
+  navLinks.querySelectorAll('a').forEach(function (a) {
+    a.addEventListener('click', function () { if (navLinks.classList.contains('is-open')) setMenu(false); });
   });
-  navLinks.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', closeMenu); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && navLinks.classList.contains('is-open')) { setMenu(false); ham.focus(); }
+  });
 
-  window.addEventListener('scroll', function () {
-    nav.classList.toggle('scrolled', window.scrollY > 50);
-    btt.classList.toggle('on', window.scrollY > 500);
-  }, { passive: true });
-  btt.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+  var mnav = $('mnav'), heroEl = $('hero');
+  function onScroll() {
+    var y = window.scrollY;
+    nav.classList.toggle('scrolled', y > 10);
+    btt.classList.toggle('on', y > 900);
+    if (mnav) mnav.classList.toggle('on', y > heroEl.offsetHeight * 0.55);
+    pageScrollHold = performance.now() + 180;
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  btt.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' }); });
 
-  /* ── REVEAL ── */
+  // voce del menu attiva in base alla sezione visibile
+  if ('IntersectionObserver' in window) {
+    var links = {};
+    document.querySelectorAll('#navLinks a[href^="#"], #mnav a[href^="#"]').forEach(function (a) {
+      var k = a.getAttribute('href').slice(1); (links[k] = links[k] || []).push(a);
+    });
+    var secObs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        Object.keys(links).forEach(function (k) { links[k].forEach(function (a) { a.classList.toggle('is-active', k === en.target.id); }); });
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    Object.keys(links).forEach(function (k) { var s = $(k); if (s) secObs.observe(s); });
+  }
+
+  /* ── COMPARSA AL PASSAGGIO ── */
   function observeReveal() {
     var els = document.querySelectorAll('.reveal:not(.in)');
-    if (!('IntersectionObserver' in window)) { els.forEach(function (el) { el.classList.add('in'); }); return; }
+    if (!('IntersectionObserver' in window) || reduceMotion) { els.forEach(function (el) { el.classList.add('in'); }); return; }
     var obs = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('in'); obs.unobserve(en.target); } });
-    }, { threshold: 0.06, rootMargin: '0px 0px -30px 0px' });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
     els.forEach(function (el) { obs.observe(el); });
   }
 
+  /* ── AVVIO ── */
+  $('statOpere').textContent = OPERE.length;
+  $('heroCount').textContent = OPERE.length;
+  $('statMostre').textContent = document.querySelectorAll('#expoList .expo-item').length;
+  $('year').textContent = new Date().getFullYear();
+
   renderGallery();
   observeReveal();
+  buildWall();
+
+  var start = hashId();
+  if (start && indexOf(start) >= 0) openDetail(start, { fromHash: true });
 })();

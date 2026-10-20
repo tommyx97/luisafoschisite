@@ -1,0 +1,34 @@
+{
+  "bio": {
+    "lead": "Le mie opere nascono dal profondo desiderio di dare voce a ciò che spesso le parole non riescono a esprimere: emozioni, visioni e pensieri che trovano nella pittura la loro forma più autentica.",
+    "paragrafi": [
+      "Mi chiamo Luisa Foschi e attraverso la pittura racconto il mio mondo interiore, trasformando emozioni e riflessioni in immagini. Nata e cresciuta a Firenze, città in cui la bellezza e l’arte sono parte integrante del paesaggio quotidiano, ho custodito a lungo questa passione in silenzio, fino al momento in cui ho sentito il bisogno di ritrovarla e darle finalmente spazio. È stato come sentire il cuore tornare a battere, riscoprendo una parte profonda e autentica di me stessa.",
+      "Dipingo prevalentemente a olio su tela, lasciandomi guidare dalla curiosità e dalla sperimentazione attraverso acrilici, foglia d’oro e tecniche miste. La mia ricerca si muove nell’ambito della figurazione, con uno stile intimo e personale, in cui ogni opera diventa uno spazio di espressione e di dialogo con chi la osserva.",
+      "Al centro del mio universo pittorico si trova la figura femminile, presenza intensa e ricca di sfumature: forza e fragilità, maternità e creaturalità, radicamento e trasformazione. Una figura che accoglie contrasti e sensibilità, diventando specchio dell’esperienza umana e delle sue infinite possibilità di espressione."
+    ]
+  },
+  "critica": {
+    "testo": "Le cromie evocano la terra e gli alberi in quella sinergia cromatica che risulta essere alla base del pensiero dell’artista. Si anima la natura nell’essenza umana che si fonde alla meraviglia della Madre Terra.",
+    "autore": "Dott.ssa Elisabetta La Rosa, storica dell’arte",
+    "fonte": "Catalogo “Espressioni d’arte del XXI sec.”"
+  },
+  "mostre": [
+    { "anno": "2026", "titolo": "Io sono così", "nota": "", "luogo": "ON ART Gallery, Firenze · 9–11 maggio", "evidenza": false },
+    { "anno": "2026", "titolo": "VisionArte", "nota": "", "luogo": "ONART Gallery, Firenze · 11–22 aprile", "evidenza": false },
+    { "anno": "2026", "titolo": "Donna Oggi #5", "nota": "", "luogo": "Galleria Gadarte, Firenze · 7–19 marzo", "evidenza": false },
+    { "anno": "2025", "titolo": "Insieme in Arte", "nota": "", "luogo": "Circolo Artisti Casa di Dante, Firenze · dicembre 2025 – gennaio 2026", "evidenza": false },
+    { "anno": "2025", "titolo": "Freedom Art", "nota": "", "luogo": "ML Show Lab, Roma · 24 ottobre – 7 novembre", "evidenza": false },
+    { "anno": "2025", "titolo": "Incontri d’Estate", "nota": "", "luogo": "Circolo Artisti Casa di Dante, Firenze · 14–26 giugno", "evidenza": false },
+    { "anno": "2025", "titolo": "Expo Donna Creativa", "nota": "", "luogo": "Firenze · 24–25 maggio", "evidenza": false },
+    { "anno": "2025", "titolo": "Ri-Composizioni", "nota": "(mostra catalogata)", "luogo": "Palazzo Rospigliosi, Zagarolo (Roma) · 1–16 febbraio", "evidenza": false },
+    { "anno": "2024", "titolo": "Mostra personale “Il mio viaggio senza meta”", "nota": "", "luogo": "Sede storica della Società Canottieri Firenze · 25 novembre – 3 dicembre", "evidenza": true },
+    { "anno": "2023", "titolo": "Arte in Vetrina", "nota": "", "luogo": "Frascati (Roma) · 30 settembre – 5 novembre", "evidenza": false },
+    { "anno": "2022", "titolo": "Fiori d’Autunno", "nota": "", "luogo": "Milano · ottobre 2022 – febbraio 2023", "evidenza": false },
+    { "anno": "2022", "titolo": "Spazio Espositivo San Marco", "nota": "", "luogo": "Firenze · 24 aprile – 4 maggio", "evidenza": false },
+    { "anno": "2022", "titolo": "MundoArti · esposizione internazionale", "nota": "", "luogo": "Valencia, Spagna", "evidenza": false },
+    { "anno": "2021", "titolo": "“Outside Your Window”", "nota": "", "luogo": "Art Space Milano · mostra virtuale", "evidenza": false }
+  ],
+  "pubblicazioni": [
+    { "titolo": "“Espressioni d’arte – Studi di critica d’arte del XXI secolo”", "dettagli": "catalogo a cura della storica dell’arte Elisabetta La Rosa · ISBN 979-12-81993-12-9" }
+  ]
+}
