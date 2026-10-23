@@ -63,6 +63,7 @@ em{font-style:italic}
 .sec-head{max-width:600px;margin-bottom:clamp(2rem,4.5vw,3.2rem)}
 .sec-lead{margin-top:.9rem;font-size:.98rem;line-height:1.75;color:var(--ink-2);max-width:54ch}
 .sec-lead a{text-decoration:underline;text-underline-offset:3px}
+.works-scale{margin-top:.55rem;font-size:.8rem;line-height:1.6;letter-spacing:.01em;color:var(--muted);max-width:54ch}
 
 /* ─── BUTTONS ─── */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:.6rem;min-height:50px;padding:.85rem 1.7rem;font-family:var(--sans);font-size:.82rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;line-height:1.2;text-align:center;border:1px solid transparent;transition:background .25s,color .25s,border-color .25s,transform .25s}
@@ -208,9 +209,14 @@ em{font-style:italic}
   .sort-btn{flex:1 1 auto;min-height:44px;padding-inline:.6rem;white-space:nowrap}
 }
 
-.works{--g:clamp(1rem,2.8vw,3rem);display:flex;align-items:flex-start;gap:var(--g)}
-.works-col{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:calc(var(--g) * 1.25)}
-.work-link{display:block;-webkit-tap-highlight-color:transparent}
+/* parete in scala: le larghezze arrivano da main.js (stessi px per cm per tutti i quadri) */
+.works{--g:clamp(1rem,2.8vw,3rem)}
+.wall-row{display:grid;justify-content:center;column-gap:var(--g);grid-template-rows:auto auto}
+.wall-row+.wall-row{margin-top:calc(var(--g) * 1.5)}
+.work,.work-link{display:grid;grid-row:span 2;grid-template-rows:subgrid;min-width:0}
+.work-link{-webkit-tap-highlight-color:transparent}
+.work-hang{align-self:end;max-width:100%}
+.work-label{align-self:start}
 
 /* cornice: listello scuro con luce dall'alto + passe-partout avorio + quadro leggermente incassato */
 .work-frame{--fw:clamp(5px,.55vw,8px);position:relative;display:block;padding:7.5%;background:#FBF8F2;
@@ -226,9 +232,10 @@ em{font-style:italic}
 .js .tile-art img:not(.is-loaded),.js .work-pic img:not(.is-loaded){opacity:0}
 .work-cta{position:absolute;left:50%;bottom:.8rem;z-index:1;transform:translate(-50%,8px);padding:.5rem 1rem;border-radius:999px;font-size:.75rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;white-space:nowrap;color:var(--ink);background:rgba(252,251,248,.95);opacity:0;transition:opacity .35s,transform .45s var(--ease)}
 
-.work-label{display:block;padding-top:1rem}
+.work-label{display:block;padding-top:1rem;min-width:0}
 .work-tag{display:inline-block;margin-bottom:.35rem;font-size:.75rem;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--terra)}
 .work-tag.sold{color:var(--muted)}
+.work-tag.is-empty{visibility:hidden}
 .work-row{display:flex;align-items:baseline;justify-content:space-between;gap:.9rem}
 .work-title{font-family:var(--serif);font-weight:500;font-size:1.14rem;line-height:1.22;color:var(--ink);transition:color .25s}
 .work-price{flex-shrink:0;font-size:.88rem;font-weight:500;letter-spacing:.02em;color:var(--terra);white-space:nowrap}
@@ -239,6 +246,8 @@ em{font-style:italic}
   .work-link:hover .work-title{color:var(--terra)}
 }
 .work.is-new{animation:workIn .55s var(--ease) both}
+.work.is-small .work-cta{display:none}
+.work.is-narrow .work-row{flex-direction:column;gap:.15rem}
 @keyframes workIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 .works-foot{text-align:center;margin-top:clamp(2.8rem,6vw,4rem)}
 @media (max-width:639px){

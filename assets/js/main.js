@@ -101,24 +101,35 @@
     return l;
   }
 
+  // misure vere in cm (larghezza × altezza)
+  function dimsOf(o) {
+    var m = String(o.dimensioni || '').match(/(\d+(?:[.,]\d+)?)\s*[×xX]\s*(\d+(?:[.,]\d+)?)/);
+    if (!m) return null;
+    var w = parseFloat(m[1].replace(',', '.')), h = parseFloat(m[2].replace(',', '.'));
+    return w > 0 && h > 0 ? { w: w, h: h } : null;
+  }
   function ratioOf(o) {
     if (o.ar > 0) return +o.ar;
-    var m = String(o.dimensioni || '').match(/(\d+(?:[.,]\d+)?)\s*[×xX]\s*(\d+(?:[.,]\d+)?)/);
-    if (!m) return 0.8;
-    var w = parseFloat(m[1].replace(',', '.')), h = parseFloat(m[2].replace(',', '.'));
-    return w && h ? w / h : 0.8;
+    var d = dimsOf(o);
+    return d ? d.w / d.h : 0.8;
+  }
+  // larghezza in cm con la forma della foto e la superficie vera del quadro (la foto non si deforma mai)
+  function widthCm(o) {
+    var d = dimsOf(o);
+    return d ? Math.sqrt(d.w * d.h * ratioOf(o)) : 50;
   }
 
-  function cardHTML(o, fresh) {
+  function cardHTML(o, fresh, it) {
     var meta = [o.anno, o.dimensioni, o.tecnica].filter(Boolean).join(' · ');
-    return '<article class="work' + (fresh ? ' is-new' : '') + '">' +
+    return '<article class="work' + (fresh ? ' is-new' : '') + (it.pw < 170 ? ' is-small' : '') + (it.iw < 240 ? ' is-narrow' : '') + '">' +
       '<a class="work-link" href="#opera/' + esc(o.id) + '" data-id="' + esc(o.id) + '">' +
-        '<div class="work-frame"><div class="work-pic" style="--ar:' + ratioOf(o).toFixed(4) + bg(o) + '">' +
-          picture(o, '(min-width:1100px) 250px, (min-width:640px) 27vw, 30vw', 'alt="' + esc(altText(o)) + '" loading="lazy" decoding="async"') +
+        '<div class="work-hang" style="width:' + it.fw.toFixed(1) + 'px"><div class="work-frame"><div class="work-pic" style="--ar:' + ratioOf(o).toFixed(4) + bg(o) + '">' +
+          picture(o, Math.ceil(it.pw) + 'px', 'alt="' + esc(altText(o)) + '" loading="lazy" decoding="async"') +
           '<span class="work-cta" aria-hidden="true">Scopri l’opera</span>' +
-        '</div></div>' +
+        '</div></div></div>' +
         '<div class="work-label">' +
-          (isNew(o) ? '<span class="work-tag">Nuova</span>' : isSold(o) ? '<span class="work-tag sold">Venduta</span>' : '') +
+          (isNew(o) ? '<span class="work-tag">Nuova</span>' : isSold(o) ? '<span class="work-tag sold">Venduta</span>' :
+            it.tagRow ? '<span class="work-tag is-empty" aria-hidden="true">&nbsp;</span>' : '') +
           '<div class="work-row"><h3 class="work-title">' + esc(o.titolo) + '</h3>' +
           '<p class="work-price">' + esc(fmtPrezzo(o.prezzo)) + '</p></div>' +
           '<p class="work-meta">' + esc(meta) + '</p>' +
@@ -126,22 +137,44 @@
       '</a></article>';
   }
 
-  // colonne sfalsate: ogni quadro va nella colonna più corta, così le proporzioni restano vere
-  function colCount() { return window.innerWidth >= 1100 ? 4 : window.innerWidth >= 640 ? 3 : 2; }
-  var cols = 0, shown = 0;
+  // parete in scala: tutti i quadri con gli stessi pixel per centimetro, così le misure si confrontano a colpo d'occhio
+  // (un 30×30 è metà di un 60×50); le cornici poggiano sulla stessa linea e i cartellini partono tutti alla stessa altezza
+  var shown = 0, wallW = 0;
+  function wallMetrics() {
+    var cw = works.clientWidth || (window.innerWidth - 32), small = cw < 600;
+    return {
+      cw: cw,
+      cm: Math.min(small ? 3 : 3.9, cw / (small ? 138 : 150)),      // pixel per centimetro
+      gap: Math.round(Math.max(18, Math.min(52, cw * 0.035))),
+      border: Math.min(8, Math.max(5, window.innerWidth * 0.0055)),  // come .work-frame --fw
+      pad: window.innerWidth < 640 ? 0.08 : 0.075,                     // passe-partout, come .work-frame
+      label: small ? 128 : 172                                         // spazio minimo per titolo e prezzo
+    };
+  }
   function renderGallery() {
     list = sortedList();
     var n = expanded ? list.length : Math.min(SHOW_N, list.length);
-    cols = colCount();
-    var html = [], h = [];
-    for (var c = 0; c < cols; c++) { html.push([]); h.push(0); }
+    var M = wallMetrics(), rows = [], row = [], used = 0;
+    wallW = M.cw;
     for (var k = 0; k < n; k++) {
-      var o = list[k], best = 0;
-      for (var j = 1; j < cols; j++) if (h[j] < h[best] - 0.05) best = j;
-      html[best].push(cardHTML(o, k >= shown && shown > 0));
-      h[best] += 0.85 / ratioOf(o) + 0.5;
+      var o = list[k], pw = widthCm(o) * M.cm;
+      var fw = (pw + 2 * M.border) / (1 - 2 * M.pad);
+      var it = { o: o, pw: pw, fw: fw, iw: Math.max(fw, M.label), fresh: k >= shown && shown > 0 };
+      if (row.length && used + M.gap + it.iw > M.cw) { rows.push(row); row = []; used = 0; }
+      used += (row.length ? M.gap : 0) + it.iw;
+      row.push(it);
     }
-    works.innerHTML = html.map(function (c) { return '<div class="works-col">' + c.join('') + '</div>'; }).join('');
+    if (row.length) rows.push(row);
+    // se nella riga c'è un'etichetta (Nuova/Venduta) tengo il suo spazio anche negli altri: i titoli restano allineati
+    rows.forEach(function (r) {
+      var t = r.some(function (it) { return isNew(it.o) || isSold(it.o); });
+      r.forEach(function (it) { it.tagRow = t; });
+    });
+    works.style.setProperty('--g', M.gap + 'px');
+    works.innerHTML = rows.map(function (r) {
+      return '<div class="wall-row" style="grid-template-columns:' + r.map(function (it) { return it.iw.toFixed(1) + 'px'; }).join(' ') + '">' +
+        r.map(function (it) { return cardHTML(it.o, it.fresh, it); }).join('') + '</div>';
+    }).join('');
     works.querySelectorAll('img').forEach(markLoaded);
     shown = n;
     showAll.hidden = list.length <= SHOW_N;
@@ -160,7 +193,11 @@
     setExpanded(!expanded);
     if (!expanded) scrollToEl($('opere'));
   });
-  window.addEventListener("resize", function () { if (colCount() !== cols) { shown = 0; renderGallery(); } });
+  var wallT;
+  window.addEventListener('resize', function () {
+    clearTimeout(wallT);
+    wallT = setTimeout(function () { if (Math.abs(works.clientWidth - wallW) > 1) renderGallery(); }, 120);
+  });
 
   document.querySelectorAll('.sort-btn').forEach(function (b) {
     b.addEventListener('click', function () {
