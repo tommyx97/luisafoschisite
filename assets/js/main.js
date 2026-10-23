@@ -144,7 +144,7 @@
     var cw = works.clientWidth || (window.innerWidth - 32), small = cw < 600;
     var vh = Math.max(560, Math.min(window.innerHeight || 900, 1300));
     // il quadro alto 100 cm occupa circa 6/10 dello schermo; il più largo (80 cm) sta sempre in una fila
-    var cm = Math.min(cw / 112, vh * 0.6 / 100, 6.5);
+    var cm = Math.min(cw / (small ? 118 : 112), vh * 0.6 / 100, 6.5);
     return {
       cw: cw,
       cm: cm,
