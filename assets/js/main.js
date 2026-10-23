@@ -113,18 +113,18 @@
     var d = dimsOf(o);
     return d ? d.w / d.h : 0.8;
   }
-  // larghezza in cm con la forma della foto e la superficie vera del quadro (la foto non si deforma mai)
-  function widthCm(o) {
+  // misure da mostrare: quelle scritte (larghezza × altezza); senza misure, 50 cm di base con la forma della foto
+  function sizeCm(o) {
     var d = dimsOf(o);
-    return d ? Math.sqrt(d.w * d.h * ratioOf(o)) : 50;
+    return d || { w: 50, h: 50 / ratioOf(o) };
   }
 
   function cardHTML(o, fresh, it) {
     var meta = [o.anno, o.dimensioni, o.tecnica].filter(Boolean).join(' · ');
     return '<article class="work' + (fresh ? ' is-new' : '') + (it.pw < 170 ? ' is-small' : '') + (it.iw < 240 ? ' is-narrow' : '') + '">' +
       '<a class="work-link" href="#opera/' + esc(o.id) + '" data-id="' + esc(o.id) + '">' +
-        '<div class="work-hang" style="width:' + it.fw.toFixed(1) + 'px"><div class="work-frame"><div class="work-pic" style="--ar:' + ratioOf(o).toFixed(4) + bg(o) + '">' +
-          picture(o, Math.ceil(it.pw) + 'px', 'alt="' + esc(altText(o)) + '" loading="lazy" decoding="async"') +
+        '<div class="work-hang" style="width:' + it.fw + 'px"><div class="work-frame"><div class="work-pic" style="width:' + it.pw + 'px;height:' + it.ph + 'px' + bg(o) + '">' +
+          picture(o, it.pw + 'px', 'alt="' + esc(altText(o)) + '" loading="lazy" decoding="async"') +
           '<span class="work-cta" aria-hidden="true">Scopri l’opera</span>' +
         '</div></div></div>' +
         '<div class="work-label">' +
@@ -137,31 +137,34 @@
       '</a></article>';
   }
 
-  // parete in scala: tutti i quadri con gli stessi pixel per centimetro, così le misure si confrontano a colpo d'occhio
-  // (un 30×30 è metà di un 60×50); le cornici poggiano sulla stessa linea e i cartellini partono tutti alla stessa altezza
+  // parete in scala: una sola scala (pixel per centimetro) per tutti i quadri e ogni lato arrotondato allo stesso modo,
+  // così un lato di 70 cm è identico in ogni quadro; le cornici poggiano sulla stessa linea, i cartellini partono insieme
   var shown = 0, wallW = 0;
   function wallMetrics() {
     var cw = works.clientWidth || (window.innerWidth - 32), small = cw < 600;
-    var cm = Math.min(small ? 3 : 3.9, cw / (small ? 138 : 150));    // pixel per centimetro
+    var vh = Math.max(560, Math.min(window.innerHeight || 900, 1300));
+    // il quadro alto 100 cm occupa circa 6/10 dello schermo; il più largo (80 cm) sta sempre in una fila
+    var cm = Math.min(cw / 112, vh * 0.6 / 100, 6.5);
     return {
       cw: cw,
       cm: cm,
-      gap: Math.round(Math.max(18, Math.min(52, cw * 0.035))),
-      // cornice sottile con spessore fisso in centimetri, come una cornice vera: la misura la dà il quadro, non la cornice
-      border: Math.round(Math.max(3, Math.min(6, cm * 1.3))),          // listello scuro (~1,3 cm)
-      mat: Math.round(Math.max(2, Math.min(4, cm * 0.8))),             // filo di passe-partout chiaro (~0,8 cm)
+      gap: Math.round(Math.max(18, Math.min(56, cw * 0.035))),
+      // cornice con spessore fisso in centimetri, uguale per tutti: la misura la dà il quadro, non la cornice
+      border: Math.round(Math.max(4, Math.min(11, cm * 1.8))),         // listello di legno (~1,8 cm)
+      mat: Math.round(Math.max(1, Math.min(3, cm * 0.4))),             // filetto dorato interno (~0,4 cm)
       label: small ? 128 : 172                                         // spazio minimo per titolo e prezzo
     };
   }
+  function px(cmv, M) { return Math.round(cmv * M.cm); }
   function renderGallery() {
     list = sortedList();
     var n = expanded ? list.length : Math.min(SHOW_N, list.length);
     var M = wallMetrics(), rows = [], row = [], used = 0;
     wallW = M.cw;
     for (var k = 0; k < n; k++) {
-      var o = list[k], pw = widthCm(o) * M.cm;
+      var o = list[k], sz = sizeCm(o), pw = px(sz.w, M), ph = px(sz.h, M);
       var fw = pw + 2 * (M.border + M.mat);
-      var it = { o: o, pw: pw, fw: fw, iw: Math.max(fw, M.label), fresh: k >= shown && shown > 0 };
+      var it = { o: o, pw: pw, ph: ph, fw: fw, iw: Math.max(fw, M.label), fresh: k >= shown && shown > 0 };
       if (row.length && used + M.gap + it.iw > M.cw) { rows.push(row); row = []; used = 0; }
       used += (row.length ? M.gap : 0) + it.iw;
       row.push(it);
@@ -389,15 +392,13 @@
   var wall = $('heroWall'), rows = [], rafId = 0, lastT = 0, pageScrollHold = 0;
 
   function tileHTML(o, copy, j) {
-    var real = copy === 1, cap = fmtPrezzo(o.prezzo);
+    var real = copy === 1;
     var eager = real && j < 5;
     return '<a class="tile" href="#opera/' + esc(o.id) + '" data-id="' + esc(o.id) + '" draggable="false"' +
-      (real ? ' aria-label="' + esc(o.titolo + ', ' + [o.anno, o.dimensioni].filter(Boolean).join(', ') + ', ' + cap) + '"' : ' tabindex="-1" aria-hidden="true"') + '>' +
+      (real ? ' aria-label="' + esc(o.titolo + ', ' + [o.anno, o.dimensioni].filter(Boolean).join(', ') + ' — apri la scheda') + '"' : ' tabindex="-1" aria-hidden="true"') + '>' +
       '<span class="tile-art" style="--ar:' + ratioOf(o).toFixed(4) + bg(o) + '">' +
         picture(o, '(min-width:900px) 360px, 140px', 'alt="" draggable="false" decoding="async" loading="' + (eager ? 'eager' : 'lazy') + '"' + (real && j < 2 ? ' fetchpriority="high"' : '')) +
-        (isNew(o) ? '<span class="tile-badge">Nuova</span>' : '') +
-      '</span>' +
-      '<span class="tile-cap"><span class="tile-title">' + esc(o.titolo) + '</span><span class="tile-price">' + esc(cap) + '</span></span></a>';
+      '</span></a>';
   }
 
   function Row(el, items, dir) {
