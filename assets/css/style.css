@@ -211,16 +211,16 @@ em{font-style:italic}
 
 /* parete in scala: le larghezze arrivano da main.js (stessi px per cm per tutti i quadri) */
 .works{--g:clamp(1rem,2.8vw,3rem)}
-.wall-row{display:grid;justify-content:center;column-gap:var(--g);grid-template-rows:auto auto}
+.wall-row{display:grid;justify-content:start;column-gap:var(--g);grid-template-rows:auto auto}
 .wall-row+.wall-row{margin-top:calc(var(--g) * 1.5)}
 .work,.work-link{display:grid;grid-row:span 2;grid-template-rows:subgrid;min-width:0}
 .work-link{-webkit-tap-highlight-color:transparent}
 .work-hang{align-self:end;max-width:100%}
 .work-label{align-self:start}
 
-/* cornice: listello scuro con luce dall'alto + passe-partout avorio + quadro leggermente incassato */
-.work-frame{--fw:clamp(5px,.55vw,8px);position:relative;display:block;padding:7.5%;background:#FBF8F2;
-  border:var(--fw) solid;border-color:#3B332C #221C17 #15110D #2A231E;
+/* cornice sottile: listello scuro con luce dall'alto + filo di passe-partout avorio (spessori in cm da main.js) */
+.work-frame{position:relative;display:block;padding:var(--mat,4px);background:#FBF8F2;
+  border:var(--fw,5px) solid;border-color:#3B332C #221C17 #15110D #2A231E;
   box-shadow:inset 0 0 0 1px rgba(255,255,255,.55),0 1px 1px rgba(20,14,8,.25),0 14px 26px -14px rgba(30,22,14,.5),0 34px 56px -36px rgba(30,22,14,.45);
   transition:transform .5s var(--ease),box-shadow .5s var(--ease)}
 .work-frame::before{content:'';position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 2px 5px rgba(20,14,8,.12)}
@@ -251,7 +251,6 @@ em{font-style:italic}
 @keyframes workIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 .works-foot{text-align:center;margin-top:clamp(2.8rem,6vw,4rem)}
 @media (max-width:639px){
-  .work-frame{padding:8%}
   .work-row{flex-direction:column;gap:.15rem}
   .work-title{font-size:1rem}
   .work-price{font-size:.84rem}
@@ -266,7 +265,8 @@ em{font-style:italic}
 .about-frame::before{content:'';position:absolute;inset:0;transform:translate(14px,14px);border:1px solid var(--gold);pointer-events:none}
 .about-frame img{position:relative;width:100%;aspect-ratio:1;object-fit:cover;background:var(--plaster)}
 .about-photo figcaption{margin-top:1.5rem;font-size:.82rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
-.about-lead{margin-top:1.4rem;font-family:var(--serif);font-style:italic;font-size:clamp(1.25rem,2.2vw,1.5rem);line-height:1.42;color:var(--ink);padding-left:1.2rem;border-left:2px solid var(--terra)}
+.about-quote{margin-top:1rem;font-family:var(--serif);font-style:italic;font-size:clamp(1.08rem,1.6vw,1.22rem);line-height:1.5;color:var(--ink-2);max-width:46ch}
+.about-lead{margin-top:1.4rem;font-family:var(--serif);font-size:clamp(1.25rem,2.2vw,1.5rem);line-height:1.42;color:var(--ink);padding-left:1.2rem;border-left:2px solid var(--terra)}
 .about-text{margin-top:1.6rem;max-width:62ch}
 .about-text p+p{margin-top:1.1rem}
 .about-sign{margin-top:1.4rem;font-family:var(--serif);font-style:italic;font-size:1.55rem;color:var(--terra)}

@@ -142,12 +142,14 @@
   var shown = 0, wallW = 0;
   function wallMetrics() {
     var cw = works.clientWidth || (window.innerWidth - 32), small = cw < 600;
+    var cm = Math.min(small ? 3 : 3.9, cw / (small ? 138 : 150));    // pixel per centimetro
     return {
       cw: cw,
-      cm: Math.min(small ? 3 : 3.9, cw / (small ? 138 : 150)),      // pixel per centimetro
+      cm: cm,
       gap: Math.round(Math.max(18, Math.min(52, cw * 0.035))),
-      border: Math.min(8, Math.max(5, window.innerWidth * 0.0055)),  // come .work-frame --fw
-      pad: window.innerWidth < 640 ? 0.08 : 0.075,                     // passe-partout, come .work-frame
+      // cornice sottile con spessore fisso in centimetri, come una cornice vera: la misura la dà il quadro, non la cornice
+      border: Math.round(Math.max(3, Math.min(6, cm * 1.3))),          // listello scuro (~1,3 cm)
+      mat: Math.round(Math.max(2, Math.min(4, cm * 0.8))),             // filo di passe-partout chiaro (~0,8 cm)
       label: small ? 128 : 172                                         // spazio minimo per titolo e prezzo
     };
   }
@@ -158,7 +160,7 @@
     wallW = M.cw;
     for (var k = 0; k < n; k++) {
       var o = list[k], pw = widthCm(o) * M.cm;
-      var fw = (pw + 2 * M.border) / (1 - 2 * M.pad);
+      var fw = pw + 2 * (M.border + M.mat);
       var it = { o: o, pw: pw, fw: fw, iw: Math.max(fw, M.label), fresh: k >= shown && shown > 0 };
       if (row.length && used + M.gap + it.iw > M.cw) { rows.push(row); row = []; used = 0; }
       used += (row.length ? M.gap : 0) + it.iw;
@@ -171,8 +173,14 @@
       r.forEach(function (it) { it.tagRow = t; });
     });
     works.style.setProperty('--g', M.gap + 'px');
-    works.innerHTML = rows.map(function (r) {
-      return '<div class="wall-row" style="grid-template-columns:' + r.map(function (it) { return it.iw.toFixed(1) + 'px'; }).join(' ') + '">' +
+    works.style.setProperty('--fw', M.border + 'px');
+    works.style.setProperty('--mat', M.mat + 'px');
+    works.innerHTML = rows.map(function (r, i) {
+      // file piene da un margine all'altro (allineate al titolo della sezione); l'ultima, se corta, parte da sinistra
+      var ws = r.reduce(function (a, it) { return a + it.iw; }, 0);
+      var full = r.length > 1 && (i < rows.length - 1 || ws + M.gap * (r.length - 1) > M.cw * 0.7);
+      var gap = full ? Math.floor((M.cw - ws) / (r.length - 1) * 10) / 10 : M.gap;
+      return '<div class="wall-row" style="column-gap:' + gap + 'px;grid-template-columns:' + r.map(function (it) { return it.iw.toFixed(1) + 'px'; }).join(' ') + '">' +
         r.map(function (it) { return cardHTML(it.o, it.fresh, it); }).join('') + '</div>';
     }).join('');
     works.querySelectorAll('img').forEach(markLoaded);
