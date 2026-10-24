@@ -8,7 +8,7 @@
    Campi di ogni opera:
    - id           nome breve senza spazi, usato nel link dell'opera (es. "buio-dentro")
    - titolo, anno, tecnica, dimensioni (es. "50×70 cm")
-   - prezzo       numero (es. 590) oppure testo ("Su richiesta" o "Venduta")
+   - prezzo       numero (es. 590) oppure testo ("Su richiesta", "Venduta" o "Non disponibile")
    - immagine     foto grande; miniatura = foto piccola per la griglia
    - webp         true se esistono le versioni .webp (le crea il pannello)
    - mese         1–12, mese di realizzazione: serve per l'ordine (dalla più recente)
@@ -176,7 +176,7 @@ window.OPERE = [
     "anno": "2023",
     "tecnica": "Olio su tela",
     "dimensioni": "40×60 cm",
-    "prezzo": "Venduta",
+    "prezzo": "Non disponibile",
     "immagine": "assets/img/opere/incanto.jpg",
     "miniatura": "assets/img/opere/incanto-sm.jpg",
     "webp": true,

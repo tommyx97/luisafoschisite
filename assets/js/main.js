@@ -27,6 +27,7 @@
   }
   function priceNum(o) { return typeof o.prezzo === 'number' ? o.prezzo : null; }
   function isSold(o) { return typeof o.prezzo === 'string' && /vendut/i.test(o.prezzo); }
+  function isUnavailable(o) { return typeof o.prezzo === 'string' && /non\s*disponibil/i.test(o.prezzo); }
   function altText(o) {
     return o.titolo + (o.tecnica ? ', ' + o.tecnica.toLowerCase() : '') + (o.dimensioni ? ', ' + o.dimensioni : '') + ' — Luisa Foschi';
   }
@@ -119,6 +120,7 @@
     return d || { w: 50, h: 50 / ratioOf(o) };
   }
 
+  // Venduta / Non disponibile: lo dice l'etichetta sopra il titolo, il prezzo resta vuoto (se c'è già "Nuova", lo dice il prezzo)
   function cardHTML(o, fresh, it) {
     var meta = [o.anno, o.dimensioni, o.tecnica].filter(Boolean).join(' · ');
     return '<article class="work' + (fresh ? ' is-new' : '') + (it.pw < 170 ? ' is-small' : '') + (it.iw < 240 ? ' is-narrow' : '') + '">' +
@@ -129,9 +131,10 @@
         '</div></div></div>' +
         '<div class="work-label">' +
           (isNew(o) ? '<span class="work-tag">Nuova</span>' : isSold(o) ? '<span class="work-tag sold">Venduta</span>' :
+            isUnavailable(o) ? '<span class="work-tag sold">Non disponibile</span>' :
             it.tagRow ? '<span class="work-tag is-empty" aria-hidden="true">&nbsp;</span>' : '') +
           '<div class="work-row"><h3 class="work-title">' + esc(o.titolo) + '</h3>' +
-          '<p class="work-price">' + esc(fmtPrezzo(o.prezzo)) + '</p></div>' +
+          '<p class="work-price">' + (!isNew(o) && (isSold(o) || isUnavailable(o)) ? '' : esc(fmtPrezzo(o.prezzo))) + '</p></div>' +
           '<p class="work-meta">' + esc(meta) + '</p>' +
         '</div>' +
       '</a></article>';
@@ -170,9 +173,9 @@
       row.push(it);
     }
     if (row.length) rows.push(row);
-    // se nella riga c'è un'etichetta (Nuova/Venduta) tengo il suo spazio anche negli altri: i titoli restano allineati
+    // se nella riga c'è un'etichetta (Nuova/Venduta/Non disponibile) tengo il suo spazio anche negli altri: i titoli restano allineati
     rows.forEach(function (r) {
-      var t = r.some(function (it) { return isNew(it.o) || isSold(it.o); });
+      var t = r.some(function (it) { return isNew(it.o) || isSold(it.o) || isUnavailable(it.o); });
       r.forEach(function (it) { it.tagRow = t; });
     });
     works.style.setProperty('--g', M.gap + 'px');
