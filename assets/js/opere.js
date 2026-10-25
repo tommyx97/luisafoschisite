@@ -9,6 +9,7 @@
    - id           nome breve senza spazi, usato nel link dell'opera (es. "buio-dentro")
    - titolo, anno, tecnica, dimensioni (es. "50×70 cm")
    - prezzo       numero (es. 590) oppure testo ("Su richiesta", "Venduta" o "Non disponibile")
+   - nascosta     true = l'opera non compare sul sito (resta solo nel pannello)
    - immagine     foto grande; miniatura = foto piccola per la griglia
    - webp         true se esistono le versioni .webp (le crea il pannello)
    - mese         1–12, mese di realizzazione: serve per l'ordine (dalla più recente)
@@ -40,7 +41,8 @@ window.OPERE = [
     "webp": true,
     "ar": 1.1939,
     "colore": "#7b7669",
-    "descrizione": "Furore… oltre l’orizzonte racconta la forza primordiale della libertà: i colori incandescenti si fondono in un’esplosione di movimento e passione.\nÈ un inno all’istinto, al coraggio di superare ogni limite e a quella parte indomita dell’anima che non smette mai di inseguire l’infinito."
+    "descrizione": "Furore… oltre l’orizzonte racconta la forza primordiale della libertà: i colori incandescenti si fondono in un’esplosione di movimento e passione.\nÈ un inno all’istinto, al coraggio di superare ogni limite e a quella parte indomita dell’anima che non smette mai di inseguire l’infinito.",
+    "nascosta": true
   },
   {
     "id": "inviolabile",

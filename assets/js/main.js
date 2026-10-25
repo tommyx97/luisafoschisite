@@ -3,7 +3,8 @@
   'use strict';
 
   var CFG = window.LF_CONFIG || {};
-  var OPERE = Array.isArray(window.OPERE) ? window.OPERE : [];
+  // le opere segnate "nascosta" nel pannello non compaiono da nessuna parte (galleria, parete, schede, link)
+  var OPERE = (Array.isArray(window.OPERE) ? window.OPERE : []).filter(function (o) { return !o.nascosta; });
   var SHOW_N = CFG.opereVisibili || 8;
   var WA = CFG.whatsapp || '';
   var root = document.documentElement;
