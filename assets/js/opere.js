@@ -246,7 +246,7 @@ window.OPERE = [
     "anno": "2023",
     "tecnica": "Olio su tela",
     "dimensioni": "50×50 cm",
-    "prezzo": 300,
+    "prezzo": "Non disponibile",
     "immagine": "assets/img/opere/sola.jpg",
     "miniatura": "assets/img/opere/sola-sm.jpg",
     "webp": true,
