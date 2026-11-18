@@ -41,8 +41,7 @@ window.OPERE = [
     "webp": true,
     "ar": 1.1939,
     "colore": "#7b7669",
-    "descrizione": "Furore… oltre l’orizzonte racconta la forza primordiale della libertà: i colori incandescenti si fondono in un’esplosione di movimento e passione.\nÈ un inno all’istinto, al coraggio di superare ogni limite e a quella parte indomita dell’anima che non smette mai di inseguire l’infinito.",
-    "nascosta": true
+    "descrizione": "Furore… oltre l’orizzonte racconta la forza primordiale della libertà: i colori incandescenti si fondono in un’esplosione di movimento e passione.\nÈ un inno all’istinto, al coraggio di superare ogni limite e a quella parte indomita dell’anima che non smette mai di inseguire l’infinito."
   },
   {
     "id": "inviolabile",
